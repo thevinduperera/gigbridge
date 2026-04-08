@@ -1,14 +1,15 @@
+# tasks/models.py
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
 # Using get_user_model() here instead of importing User directly
+# because M1 is creating a custom User model in the accounts app.
 User = get_user_model()
 
 
 class Category(models.Model):
-    # Categories like "Web Development" or "Graphic Design"
-    # are created by the admin and used to organise tasks
-    # on the browse page.
+    # Categories like "Web Development" or "Graphic Design" are created by the admin and used to organise tasks on the browse page.
 
     name = models.CharField(max_length=100)
     icon = models.CharField(
@@ -17,8 +18,6 @@ class Category(models.Model):
     )
     slug = models.SlugField(
         unique=True,
-        # Used in URLs e.g. /tasks/category/web-development/
-        # Auto-filled in the admin panel based on the name
         help_text="URL-friendly name e.g. 'web-development'"
     )
 
@@ -51,7 +50,8 @@ class Skill(models.Model):
 
 class Task(models.Model):
     # A task is a job posted by a client.
-    # The typical flow is: open → in_progress (once awarded) → completed (once client confirms)
+    # The typical flow is:
+    # open → in_progress (once awarded) → completed (once client confirms)
     # A client can also cancel a task if no one has been awarded yet.
 
     STATUS_OPEN        = 'open'
@@ -66,13 +66,13 @@ class Task(models.Model):
         (STATUS_CANCELLED,   'Cancelled'),
     ]
 
-    
+    # who posted this task - must be a client
     client = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='posted_tasks'  
+        related_name='posted_tasks'  # lets us do user.posted_tasks.all()
     )
-    title = models.CharField(max_length=200)
+    title       = models.CharField(max_length=200)
     description = models.TextField()
 
     category = models.ForeignKey(
@@ -118,9 +118,12 @@ class Task(models.Model):
 
     def proposal_count(self):
         # relies on the related_name='proposals' set in the Proposal model
-        # in the proposals app - so this won't work its setup
-        return self.proposals.count()
+        # in the proposals app - returns 0 safely until Member 3 sets that up
+        try:
+            return self.proposals.count()
+        except AttributeError:
+            return 0
 
     def budget_display(self):
+        # handy for showing a clean range in templates e.g. "$500 - $1,000"
         return f"${self.budget_min:,.0f} - ${self.budget_max:,.0f}"
-    

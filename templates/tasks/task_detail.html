@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ task.title }} — GigBridge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+
+    <!-- main content -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+          <!-- status badge + category -->
+          <div class="d-flex gap-2 mb-3">
+            {% if task.status == 'open' %}
+              <span class="badge rounded-pill px-3 py-2" style="background: var(--teal-100); color: var(--teal-600);">
+                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>Open
+              </span>
+            {% elif task.status == 'in_progress' %}
+              <span class="badge rounded-pill px-3 py-2 bg-warning text-dark">
+                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>In Progress
+              </span>
+            {% elif task.status == 'completed' %}
+              <span class="badge rounded-pill px-3 py-2 bg-success">
+                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>Completed
+              </span>
+            {% elif task.status == 'cancelled' %}
+              <span class="badge rounded-pill px-3 py-2 bg-secondary">
+                <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>Cancelled
+              </span>
+            {% endif %}
+
+            {% if task.category %}
+            <span class="badge rounded-pill px-3 py-2" style="background: var(--slate-100); color: var(--slate-600);">
+              <i class="bi {{ task.category.icon }} me-1"></i>{{ task.category.name }}
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- title -->
+          <h2 class="fw-bold mb-3" style="color: var(--slate-800);">{{ task.title }}</h2>
+
+          <!-- description -->
+          <p class="mb-4" style="color: var(--slate-600); line-height: 1.8;">{{ task.description }}</p>
+
+          <!-- skills -->
+          {% if task.skills_required.all %}
+          <div class="mb-4">
+            <h6 class="fw-bold mb-2" style="color: var(--slate-700);">Skills Required</h6>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in task.skills_required.all %}
+              <span class="badge rounded-pill px-3 py-2" style="background: var(--slate-100); color: var(--slate-700);">
+                {{ skill.name }}
+              </span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- client actions — only visible to the client who posted this task -->
+          {% if user.is_authenticated and user == task.client %}
+          <div class="d-flex gap-2 pt-3 border-top">
+            {% if task.is_open %}
+              <a href="{% url 'edit_task' task.pk %}" class="btn btn-outline-primary">
+                <i class="bi bi-pencil me-2"></i>Edit Task
+              </a>
+              <!-- cancel uses a small form so we can send a POST request -->
+              <form method="POST" action="{% url 'cancel_task' task.pk %}">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-outline-danger"
+                  onclick="return confirm('Are you sure you want to cancel this task?')"
+                >
+                  <i class="bi bi-x-circle me-2"></i>Cancel Task
+                </button>
+              </form>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <!-- apply button — only visible to freelancers on open tasks -->
+          {% if user.is_authenticated and user.role == 'freelancer' and task.is_open %}
+          <div class="pt-3 border-top">
+            <!-- this links to the submit proposal page built by Member 3 -->
+            <a href="{% url 'submit_proposal' task.pk %}" class="btn btn-primary px-4">
+              <i class="bi bi-send me-2"></i>Apply Now
+            </a>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar -->
+    <div class="col-lg-4">
+
+      <!-- task details card -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3" style="color: var(--slate-700);">Task Details</h6>
+
+          <div class="d-flex flex-column gap-3">
+
+            <div class="d-flex justify-content-between">
+              <span style="color: var(--slate-500);">
+                <i class="bi bi-cash me-2"></i>Budget
+              </span>
+              <span class="fw-semibold" style="color: var(--slate-800);">
+                {{ task.budget_display }}
+              </span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span style="color: var(--slate-500);">
+                <i class="bi bi-calendar me-2"></i>Deadline
+              </span>
+              <span class="fw-semibold" style="color: var(--slate-800);">
+                {{ task.deadline }}
+              </span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span style="color: var(--slate-500);">
+                <i class="bi bi-file-text me-2"></i>Proposals
+              </span>
+              <span class="fw-semibold" style="color: var(--slate-800);">
+                {{ task.proposal_count }}
+              </span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span style="color: var(--slate-500);">
+                <i class="bi bi-clock me-2"></i>Posted
+              </span>
+              <span class="fw-semibold" style="color: var(--slate-800);">
+                {{ task.created_at|date:"M d, Y" }}
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- client info card -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3" style="color: var(--slate-700);">Posted By</h6>
+          <div class="d-flex align-items-center gap-3">
+            <!-- default avatar until M1 sets up profile pictures -->
+            <img
+              src="{% static 'images/default-avatar.png' %}"
+              alt="Client"
+              class="rounded-circle"
+              width="48" height="48"
+              style="object-fit: cover;"
+            />
+            <div>
+              <p class="fw-semibold mb-0" style="color: var(--slate-800);">
+                {{ task.client.get_full_name|default:task.client.username }}
+              </p>
+              <small style="color: var(--slate-500);">Client</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,5 +1,6 @@
 # We register our models here so they show up in the admin panel.
-# The admin is mainly used to add Categories and Skills since clients and freelancers can't create those themselves.
+# The admin is mainly used to add Categories and Skills since
+# clients and freelancers can't create those themselves.
 
 from django.contrib import admin
 from .models import Category, Skill, Task
@@ -24,4 +25,3 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter     = ['status', 'category']
     search_fields   = ['title', 'description']
     readonly_fields = ['created_at', 'updated_at']  # these are auto-set so no point editing them manually
-    
