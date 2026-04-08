@@ -8,7 +8,8 @@
   --teal-500:  #14b8a6;
   --teal-300:  #5eead4;
   --white:     #ffffff;
-
+  --teal-400:  #2dd4bf;
+  --slate-200: #e2e8f0;
   --font-heading: 'DM Sans', sans-serif;
   --font-body:    'Inter', sans-serif;
 }
@@ -31,4 +32,23 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary:hover {
   background-color: var(--teal-500);
   border-color: var(--teal-500);
+}
+
+/* navbar link hover effects */
+.navbar .nav-link:hover {
+  color: var(--teal-400) !important;
+}
+
+.navbar .dropdown-toggle:hover span {
+  color: var(--teal-400) !important;
+}
+
+/* make navbar links clearly visible */
+.nav-link {
+  color: var(--slate-200) !important;
+}
+
+/* active nav link */
+.nav-link.active {
+  color: var(--teal-500) !important;
 }
