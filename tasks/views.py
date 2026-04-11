@@ -12,7 +12,7 @@ def post_task(request):
     # User model with the role field isn't set up yet
     if getattr(request.user, 'role', None) != 'client':
         messages.error(request, "Only clients can post tasks.")
-        return redirect('home')
+        return redirect('core:home')
 
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -114,7 +114,7 @@ def client_dashboard(request):
     # using getattr safely until Member 1's custom User model is ready
     if getattr(request.user, 'role', None) != 'client':
         messages.error(request, "Access denied.")
-        return redirect('home')
+        return redirect('core:home')
 
     tasks = Task.objects.filter(client=request.user).select_related('category')
 
@@ -133,7 +133,7 @@ def freelancer_dashboard(request):
     # using getattr safely until Member 1's custom User model is ready
     if getattr(request.user, 'role', None) != 'freelancer':
         messages.error(request, "Access denied.")
-        return redirect('home')
+        return redirect('core:home')
 
     # submitted_proposals comes from the related_name set in
     # Member 3's Proposal model - returns empty until that's done
