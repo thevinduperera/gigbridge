@@ -6,10 +6,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls', namespace='core')),
-
-    # Uncomment when other members create their urls.py
-    # path('accounts/', include('accounts.urls', namespace='accounts')),
-    # path('tasks/', include('tasks.urls', namespace='tasks')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('tasks/', include('tasks.urls', namespace='tasks')),
     # path('proposals/', include('proposals.urls', namespace='proposals')),
 ]
 
