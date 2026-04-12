@@ -4,6 +4,25 @@
   <div class="row">
     <div class="col-12">
       <h3 class="mb-4" style="color: var(--slate-900);">My Proposals</h3>
+      <!-- Filter buttons -->
+      <div class="mb-4">
+        <a href="?status=" 
+           class="btn btn-sm me-2 {% if not status_filter %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+          All
+        </a>
+        <a href="?status=pending" 
+           class="btn btn-sm me-2 {% if status_filter == 'pending' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+          Pending
+        </a>
+        <a href="?status=awarded" 
+           class="btn btn-sm me-2 {% if status_filter == 'awarded' %}btn-success{% else %}btn-outline-secondary{% endif %}">
+          Awarded
+        </a>
+        <a href="?status=rejected" 
+           class="btn btn-sm {% if status_filter == 'rejected' %}btn-danger{% else %}btn-outline-secondary{% endif %}">
+          Rejected
+        </a>
+      </div>
     </div>
   </div>
   {% for p in proposals %}
@@ -36,7 +55,7 @@
   <div class="card border-0 shadow-sm">
     <div class="card-body p-5 text-center">
       <i class="bi bi-file-earmark-text fs-1 text-muted"></i>
-      <p class="mt-3 text-muted">You have not submitted any proposals yet.</p>
+      <p class="mt-3 text-muted">No proposals found.</p>
       <a href="{% url 'core:home' %}" class="btn btn-primary">Browse Tasks</a>
     </div>
   </div>
