@@ -15,7 +15,7 @@ class Proposal(models.Model):
     freelancer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='proposals_sent'
+        related_name='submitted_proposals'
     )
     cover_letter = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
