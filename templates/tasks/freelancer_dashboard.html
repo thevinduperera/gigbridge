@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Freelancer Dashboard — GigBridge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- page header -->
+  <div class="mb-4">
+    <h2 class="fw-bold mb-1" style="color: var(--slate-800);">
+      Welcome, {{ user.get_full_name|default:user.username }}
+    </h2>
+    <p class="mb-0" style="color: var(--slate-500);">Track your proposals and awarded tasks here.</p>
+  </div>
+
+  <!-- stats cards -->
+  <div class="row g-4 mb-5">
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="color: var(--slate-500);">Total Proposals</span>
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width:40px; height:40px; background: var(--slate-100);">
+              <i class="bi bi-send" style="color: var(--slate-600);"></i>
+            </div>
+          </div>
+          <h3 class="fw-bold mb-0" style="color: var(--slate-800);">{{ total_proposals }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="color: var(--slate-500);">Pending</span>
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width:40px; height:40px; background: #fff3cd;">
+              <i class="bi bi-hourglass" style="color: #856404;"></i>
+            </div>
+          </div>
+          <h3 class="fw-bold mb-0" style="color: var(--slate-800);">{{ pending_proposals }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="color: var(--slate-500);">Awarded</span>
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width:40px; height:40px; background: var(--teal-100);">
+              <i class="bi bi-trophy" style="color: var(--teal-600);"></i>
+            </div>
+          </div>
+          <h3 class="fw-bold mb-0" style="color: var(--slate-800);">{{ accepted_proposals }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="color: var(--slate-500);">Rejected</span>
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width:40px; height:40px; background: #f8d7da;">
+              <i class="bi bi-x-circle" style="color: #842029;"></i>
+            </div>
+          </div>
+          <h3 class="fw-bold mb-0" style="color: var(--slate-800);">{{ rejected_proposals }}</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- proposals table -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0" style="color: var(--slate-800);">Your Proposals</h5>
+        <a href="{% url 'task_list' %}" class="btn btn-primary">
+          <i class="bi bi-search me-2"></i>Browse Tasks
+        </a>
+      </div>
+
+      {% if proposals %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead style="background: var(--slate-100);">
+            <tr>
+              <th style="color: var(--slate-600);">Task</th>
+              <th style="color: var(--slate-600);">Your Price</th>
+              <th style="color: var(--slate-600);">Est. Days</th>
+              <th style="color: var(--slate-600);">Submitted</th>
+              <th style="color: var(--slate-600);">Status</th>
+              <th style="color: var(--slate-600);">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for proposal in proposals %}
+            <tr>
+              <td>
+                <a href="{% url 'task_detail' proposal.task.pk %}"
+                  class="fw-semibold text-decoration-none"
+                  style="color: var(--slate-800);">
+                  {{ proposal.task.title }}
+                </a>
+              </td>
+              <td style="color: var(--slate-600);">${{ proposal.proposed_price }}</td>
+              <td style="color: var(--slate-600);">{{ proposal.estimated_days }} days</td>
+              <td style="color: var(--slate-600);">{{ proposal.submitted_at|date:"M d, Y" }}</td>
+              <td>
+                {% if proposal.status == 'pending' %}
+                  <span class="badge rounded-pill px-3 bg-warning text-dark">Pending</span>
+                {% elif proposal.status == 'accepted' %}
+                  <span class="badge rounded-pill px-3" style="background: var(--teal-100); color: var(--teal-600);">Awarded</span>
+                {% elif proposal.status == 'rejected' %}
+                  <span class="badge rounded-pill px-3 bg-secondary">Rejected</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'task_detail' proposal.task.pk %}"
+                  class="btn btn-sm btn-outline-primary">
+                  View Task
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% else %}
+      <!-- empty state -->
+      <div class="text-center py-5">
+        <i class="bi bi-send display-1" style="color: var(--slate-300);"></i>
+        <h5 class="mt-3 fw-bold" style="color: var(--slate-600);">No proposals yet</h5>
+        <p style="color: var(--slate-500);">Browse open tasks and submit your first proposal.</p>
+        <a href="{% url 'task_list' %}" class="btn btn-primary mt-2">
+          <i class="bi bi-search me-2"></i>Browse Tasks
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
