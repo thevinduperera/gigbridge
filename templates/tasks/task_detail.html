@@ -63,7 +63,7 @@
           {% if user.is_authenticated and user == task.client %}
           <div class="d-flex gap-2 pt-3 border-top">
             {% if task.is_open %}
-              <a href="{% url 'edit_task' task.pk %}" class="btn btn-outline-primary">
+              <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-outline-primary">
                 <i class="bi bi-pencil me-2"></i>Edit Task
               </a>
               <!-- cancel uses a small form so we can send a POST request -->

@@ -84,7 +84,7 @@
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0" style="color: var(--slate-800);">Your Proposals</h5>
-        <a href="{% url 'task_list' %}" class="btn btn-primary">
+        <a href="{% url 'tasks:task_list' %}" class="btn btn-primary">
           <i class="bi bi-search me-2"></i>Browse Tasks
         </a>
       </div>
@@ -106,7 +106,7 @@
             {% for proposal in proposals %}
             <tr>
               <td>
-                <a href="{% url 'task_detail' proposal.task.pk %}"
+                <a href="{% url 'tasks:task_detail' proposal.task.pk %}"
                   class="fw-semibold text-decoration-none"
                   style="color: var(--slate-800);">
                   {{ proposal.task.title }}
@@ -125,7 +125,7 @@
                 {% endif %}
               </td>
               <td>
-                <a href="{% url 'task_detail' proposal.task.pk %}"
+                <a href="{% url 'tasks:task_detail' proposal.task.pk %}"
                   class="btn btn-sm btn-outline-primary">
                   View Task
                 </a>
@@ -142,7 +142,7 @@
         <i class="bi bi-send display-1" style="color: var(--slate-300);"></i>
         <h5 class="mt-3 fw-bold" style="color: var(--slate-600);">No proposals yet</h5>
         <p style="color: var(--slate-500);">Browse open tasks and submit your first proposal.</p>
-        <a href="{% url 'task_list' %}" class="btn btn-primary mt-2">
+        <a href="{% url 'tasks:task_list' %}" class="btn btn-primary mt-2">
           <i class="bi bi-search me-2"></i>Browse Tasks
         </a>
       </div>
