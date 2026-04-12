@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">Leave a Review</h2>
+  <p>Task <strong>{{ task.title }}</strong> is completed!</p>
+  <p>Please leave a review for 
+  <strong>{{ proposal.freelancer.username }}</strong></p>
+  <form method="post" action="{% url 'leave_review' proposal.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Rating (1 to 5)</label>
+      {{ form.rating }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Comment</label>
+      {{ form.comment }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Review</button>
+  </form>
+</div>
+{% endblock %}

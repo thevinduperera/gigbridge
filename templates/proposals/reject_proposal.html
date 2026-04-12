@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">Reject Proposal</h2>
+  <p>You are rejecting the proposal from 
+  <strong>{{ proposal.freelancer.username }}</strong></p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Reason (optional)</label>
+      {{ form.reason }}
+    </div>
+    <button type="submit" class="btn btn-danger">Confirm Reject</button>
+    <a href="{% url 'view_proposals' proposal.task.id %}" 
+    class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

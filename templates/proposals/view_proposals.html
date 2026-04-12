@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">Proposals for: {{ task.title }}</h2>
+  {% for p in proposals %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5>{{ p.freelancer.get_full_name|default:p.freelancer.username }}</h5>
+      <p>{{ p.cover_letter }}</p>
+      <p class="text-muted">${{ p.price }} · {{ p.estimated_days }} days</p>
+      {% if p.status == 'pending' %}
+      <a href="{% url 'award_proposal' p.id %}" class="btn btn-success btn-sm">Award</a>
+      <a href="{% url 'reject_proposal' p.id %}" class="btn btn-outline-danger btn-sm">Reject</a>
+      {% else %}
+      <span class="badge bg-secondary">{{ p.status }}</span>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <p>No proposals yet.</p>
+  {% endfor %}
+  {% if task.status == 'in_progress' %}
+  <a href="{% url 'mark_completed' task.id %}" class="btn btn-primary mt-3">Mark as Completed</a>
+  {% endif %}
+</div>
+{% endblock %}
