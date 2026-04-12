@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('accounts/', include('accounts.urls')),
     path('tasks/', include('tasks.urls')),
+    path('proposals/', include('proposals.urls')),
 ]
 
 if settings.DEBUG:
