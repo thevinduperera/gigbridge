@@ -8,6 +8,13 @@ from .forms import ProposalForm, RejectForm, ReviewForm
 def submit_proposal(request, task_id):
     from tasks.models import Task
     task = get_object_or_404(Task, id=task_id)
+    # Check if freelancer already applied
+    already_applied = Proposal.objects.filter(
+        task=task, freelancer=request.user
+    ).exists()
+    if already_applied:
+        messages.warning(request, 'You have already applied for this task!')
+        return redirect('task_detail', pk=task_id)
     if request.method == 'POST':
         form = ProposalForm(request.POST)
         if form.is_valid():
