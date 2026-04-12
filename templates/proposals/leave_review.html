@@ -1,21 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-5">
-  <h2 class="mb-4">Leave a Review</h2>
-  <p>Task <strong>{{ task.title }}</strong> is completed!</p>
-  <p>Please leave a review for 
-  <strong>{{ proposal.freelancer.username }}</strong></p>
-  <form method="post" action="{% url 'leave_review' proposal.id %}">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label class="form-label">Rating (1 to 5)</label>
-      {{ form.rating }}
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <i class="bi bi-star-fill text-warning fs-1"></i>
+            <h3 class="mt-2" style="color: var(--slate-900);">Leave a Review</h3>
+            <p class="text-muted">
+              Task <strong>{{ task.title }}</strong> is completed!
+            </p>
+          </div>
+          <p class="text-muted mb-4">
+            How was your experience with
+            <strong>{{ proposal.freelancer.username }}</strong>?
+          </p>
+          <form method="post" action="{% url 'leave_review' proposal.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Rating (1 to 5)</label>
+              {{ form.rating }}
+              <div class="form-text">1 = Poor, 5 = Excellent</div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Comment</label>
+              {{ form.comment }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              <i class="bi bi-star"></i> Submit Review
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Comment</label>
-      {{ form.comment }}
-    </div>
-    <button type="submit" class="btn btn-primary">Submit Review</button>
-  </form>
+  </div>
 </div>
 {% endblock %}
