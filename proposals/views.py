@@ -34,8 +34,11 @@ def my_proposals(request):
     proposals = Proposal.objects.filter(
         freelancer=request.user
     ).select_related('task')
+    status_filter = request.GET.get('status', '')
+    if status_filter:
+        proposals = proposals.filter(status=status_filter)
     return render(request, 'proposals/my_proposals.html',
-                  {'proposals': proposals})
+                  {'proposals': proposals, 'status_filter': status_filter})
 
 @login_required
 def view_proposals(request, task_id):
