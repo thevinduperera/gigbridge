@@ -97,3 +97,11 @@ def leave_review(request, proposal_id):
             messages.success(request, 'Review saved!')
             return redirect('my_proposals')
     return redirect('my_proposals')
+
+@login_required
+def proposal_detail(request, proposal_id):
+    proposal = get_object_or_404(
+        Proposal, id=proposal_id, freelancer=request.user
+    )
+    return render(request, 'proposals/proposal_detail.html',
+                  {'proposal': proposal})
