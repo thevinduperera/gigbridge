@@ -4,6 +4,19 @@
   <div class="row">
     <div class="col-12">
       <h3 class="mb-4" style="color: var(--slate-900);">My Proposals</h3>
+      <!-- Search box -->
+<form method="get" class="mb-3">
+  <div class="input-group">
+    <input type="text" 
+           name="search" 
+           class="form-control" 
+           placeholder="Search proposals..." 
+           value="{{ search }}">
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-search"></i> Search
+    </button>
+  </div>
+</form>
       <!-- Filter buttons -->
       <div class="mb-4">
         <a href="?status=" 

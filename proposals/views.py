@@ -35,11 +35,15 @@ def my_proposals(request):
         freelancer=request.user
     ).select_related('task')
     status_filter = request.GET.get('status', '')
+    search = request.GET.get('search', '')
     if status_filter:
         proposals = proposals.filter(status=status_filter)
+    if search:
+        proposals = proposals.filter(task__title__icontains=search)
     return render(request, 'proposals/my_proposals.html',
-                  {'proposals': proposals, 'status_filter': status_filter})
-
+                  {'proposals': proposals,
+                   'status_filter': status_filter,
+                   'search': search})
 @login_required
 def view_proposals(request, task_id):
     from tasks.models import Task
