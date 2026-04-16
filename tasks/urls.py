@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'tasks'
+
 urlpatterns = [
     # public pages - no login needed
     path('', views.task_list, name='task_list'),

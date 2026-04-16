@@ -17,7 +17,7 @@
       <!-- center links -->
       <ul class="navbar-nav me-auto ms-4 gap-1">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'task_list' %}" style="color: var(--slate-200);">
+          <a class="nav-link" href="{% url 'tasks:task_list' %}" style="color: var(--slate-200);">
             <i class="bi bi-search me-1"></i>Browse Tasks
           </a>
         </li>
@@ -58,6 +58,23 @@
 </li>
           
           {% endif %}
+
+          <!-- Notification Bell — Added by Member 4 -->
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="{% url 'core:notifications' %}">
+              <i class="bi bi-bell" style="color: var(--slate-200); font-size: 1.1rem;"></i>
+              {% if unread_notifications_count > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                    style="background-color: var(--teal-600); font-size: 0.6rem;">
+                {{ unread_notifications_count }}
+              </span>
+              {% endif %}
+            </a>
+          </li>
+
+          <!-- user dropdown -->
+          <li class="nav-item dropdown">
+            
 
           <!-- user dropdown -->
           <li class="nav-item dropdown">

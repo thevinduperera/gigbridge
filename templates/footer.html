@@ -20,7 +20,7 @@
         <h6 class="fw-bold mb-3" style="color: var(--white);">Quick Links</h6>
         <ul class="list-unstyled d-flex flex-column gap-2">
           <li>
-            <a href="{% url 'task_list' %}" class="text-decoration-none" style="color: var(--slate-500);">
+            <a href="{% url 'tasks:task_list' %}" class="text-decoration-none" style="color: var(--slate-500);">
               Browse Tasks
             </a>
           </li>
@@ -42,25 +42,25 @@
         <h6 class="fw-bold mb-3" style="color: var(--white);">Categories</h6>
         <ul class="list-unstyled d-flex flex-column gap-2">
           <li>
-            <a href="{% url 'task_list' %}?category=web-development"
+            <a href="{% url 'tasks:task_list' %}?category=web-development"
               class="text-decoration-none" style="color: var(--slate-500);">
               Web Development
             </a>
           </li>
           <li>
-            <a href="{% url 'task_list' %}?category=graphic-design"
+            <a href="{% url 'tasks:task_list' %}?category=graphic-design"
               class="text-decoration-none" style="color: var(--slate-500);">
               Graphic Design
             </a>
           </li>
           <li>
-            <a href="{% url 'task_list' %}?category=writing-content"
+            <a href="{% url 'tasks:task_list' %}?category=writing-content"
               class="text-decoration-none" style="color: var(--slate-500);">
               Writing & Content
             </a>
           </li>
           <li>
-            <a href="{% url 'task_list' %}?category=digital-marketing"
+            <a href="{% url 'tasks:task_list' %}?category=digital-marketing"
               class="text-decoration-none" style="color: var(--slate-500);">
               Digital Marketing
             </a>

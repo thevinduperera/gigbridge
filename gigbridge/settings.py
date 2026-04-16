@@ -66,7 +66,11 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+<<<<<<< HEAD
                 'proposals.context_processors.proposal_count',
+=======
+                "core.context_processors.notifications_count",
+>>>>>>> 9db20fa (feat: add notification context processor for bell count)
             ],
         },
     },

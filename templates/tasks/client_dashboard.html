@@ -14,7 +14,7 @@
       </h2>
       <p class="mb-0" style="color: var(--slate-500);">Here's an overview of your posted tasks.</p>
     </div>
-    <a href="{% url 'post_task' %}" class="btn btn-primary">
+    <a href="{% url 'tasks:post_task' %}" class="btn btn-primary">
       <i class="bi bi-plus-lg me-2"></i>Post New Task
     </a>
   </div>
@@ -107,7 +107,7 @@
             {% for task in tasks %}
             <tr>
               <td>
-                <a href="{% url 'task_detail' task.pk %}"
+                <a href="{% url 'tasks:task_detail' task.pk %}"
                   class="fw-semibold text-decoration-none"
                   style="color: var(--slate-800);">
                   {{ task.title }}
@@ -189,7 +189,7 @@
         <i class="bi bi-inbox display-1" style="color: var(--slate-300);"></i>
         <h5 class="mt-3 fw-bold" style="color: var(--slate-600);">No tasks yet</h5>
         <p style="color: var(--slate-500);">Post your first task and start receiving proposals.</p>
-        <a href="{% url 'post_task' %}" class="btn btn-primary mt-2">
+        <a href="{% url 'tasks:post_task' %}" class="btn btn-primary mt-2">
           <i class="bi bi-plus-lg me-2"></i>Post a Task
         </a>
       </div>
