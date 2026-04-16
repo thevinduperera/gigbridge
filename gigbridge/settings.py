@@ -66,6 +66,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'proposals.context_processors.proposal_count',
+                "core.context_processors.notifications_count",
             ],
         },
     },
