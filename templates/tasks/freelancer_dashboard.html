@@ -7,12 +7,17 @@
 <div class="container py-5">
 
   <!-- page header -->
-  <div class="mb-4">
+ <div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
     <h2 class="fw-bold mb-1" style="color: var(--slate-800);">
       Welcome, {{ user.get_full_name|default:user.username }}
     </h2>
     <p class="mb-0" style="color: var(--slate-500);">Track your proposals and awarded tasks here.</p>
   </div>
+  <a href="{% url 'my_proposals' %}" class="btn btn-primary">
+    <i class="bi bi-send me-2"></i>My Proposals
+  </a>
+</div>
 
   <!-- stats cards -->
   <div class="row g-4 mb-5">
