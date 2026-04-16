@@ -34,3 +34,10 @@ def mark_all_read(request):
     ).update(is_read=True)
     messages.success(request, 'All notifications marked as read.')
     return redirect('core:notifications')
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def handler500(request):
+    return render(request, '500.html', status=500)
