@@ -142,6 +142,45 @@
               </td>
               <td>
                 <div class="d-flex gap-1">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  <a href="{% url 'task_detail' task.pk %}"
+    class="btn btn-sm btn-outline-primary">
+    View
+  </a>
+  {% if task.is_open %}
+  <a href="{% url 'edit_task' task.pk %}"
+    class="btn btn-sm btn-outline-secondary">
+    Edit
+  </a>
+  {% endif %}
+  <!-- link to view all proposals for this task -->
+  <a href="{% url 'view_proposals' task.pk %}"
+    class="btn btn-sm btn-outline-success">
+    <i class="bi bi-people me-1"></i>Proposals
+    {% if task.proposal_count > 0 %}
+      <span class="badge rounded-pill ms-1"
+        style="background: var(--teal-600); font-size: 0.7rem;">
+        {{ task.proposal_count }}
+      </span>
+    {% endif %}
+  </a>
+  <!-- mark completed button - only for in progress tasks -->
+  {% if task.status == 'in_progress' %}
+  <form method="POST" action="{% url 'mark_completed' task.pk %}" class="d-inline">
+    {% csrf_token %}
+    <button type="submit"
+      class="btn btn-sm btn-success"
+      onclick="return confirm('Mark this task as completed?')">
+      <i class="bi bi-check-lg me-1"></i>Complete
+    </button>
+  </form>
+  {% endif %}
+</div>
+                
+=======
+>>>>>>> dev
                   <a href="{% url 'tasks:task_detail' task.pk %}"
                     class="btn btn-sm btn-outline-primary">
                     View
@@ -153,6 +192,7 @@
                   </a>
                   {% endif %}
                 </div>
+>>>>>>> 83207ca (fix: add tasks namespace to all url tags in task templates)
               </td>
             </tr>
             {% endfor %}
@@ -177,3 +217,4 @@
 
 </div>
 {% endblock %}
+

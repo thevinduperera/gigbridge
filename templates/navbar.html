@@ -30,6 +30,23 @@
 
           <!-- dashboard link based on role -->
           {% if user.role == 'client' %}
+
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'client_dashboard' %}" style="color: var(--slate-200);">
+    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'post_task' %}" style="color: var(--slate-200);">
+    <i class="bi bi-plus-circle me-1"></i>Post Task
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'task_list' %}" style="color: var(--slate-200);">
+    <i class="bi bi-list-task me-1"></i>My Tasks
+  </a>
+</li>
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'accounts:accounts_client_dashboard' %}" style="color: var(--slate-200);">
               <i class="bi bi-speedometer2 me-1"></i>Dashboard
@@ -40,13 +57,62 @@
               <i class="bi bi-plus-circle me-1"></i>Post Task
             </a>
           </li>
+
           {% elif user.role == 'freelancer' %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'freelancer_dashboard' %}" style="color: var(--slate-200);">
+    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'my_proposals' %}" style="color: var(--slate-200);">
+    <i class="bi bi-send me-1"></i>My Proposals
+  </a>
+</li>
+          
+          {% endif %}
+
+          <!-- Notification Bell — Added by Member 4 -->
           <li class="nav-item">
+<<<<<<< HEAD
+=======
+
+            <a class="nav-link position-relative" href="{% url 'core:notifications' %}">
+              <i class="bi bi-bell" style="color: var(--slate-200); font-size: 1.1rem;"></i>
+              {% if unread_notifications_count > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                    style="background-color: var(--teal-600); font-size: 0.6rem;">
+                {{ unread_notifications_count }}
+              </span>
+              {% endif %}
+=======
+>>>>>>> dev
             <a class="nav-link" href="{% url 'accounts:accounts_freelancer_dashboard' %}" style="color: var(--slate-200);">
               <i class="bi bi-speedometer2 me-1"></i>Dashboard
+
             </a>
           </li>
-          {% endif %}
+
+          <!-- user dropdown -->
+          <li class="nav-item dropdown">
+            
+
+          <!-- Notification Bell — Added by Member 4 -->
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="{% url 'core:notifications' %}">
+              <i class="bi bi-bell" style="color: var(--slate-200); font-size: 1.1rem;"></i>
+              {% if unread_notifications_count > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                    style="background-color: var(--teal-600); font-size: 0.6rem;">
+                {{ unread_notifications_count }}
+              </span>
+              {% endif %}
+            </a>
+          </li>
+
+          <!-- user dropdown -->
+          <li class="nav-item dropdown">
+            
 
           <!-- Notification Bell — Added by Member 4 -->
           <li class="nav-item">
