@@ -30,22 +30,33 @@
 
           <!-- dashboard link based on role -->
           {% if user.role == 'client' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:accounts_client_dashboard' %}" style="color: var(--slate-200);">
-              <i class="bi bi-speedometer2 me-1"></i>Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'tasks:post_task' %}" style="color: var(--slate-200);">
-              <i class="bi bi-plus-circle me-1"></i>Post Task
-            </a>
-          </li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'client_dashboard' %}" style="color: var(--slate-200);">
+    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'post_task' %}" style="color: var(--slate-200);">
+    <i class="bi bi-plus-circle me-1"></i>Post Task
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'task_list' %}" style="color: var(--slate-200);">
+    <i class="bi bi-list-task me-1"></i>My Tasks
+  </a>
+</li>
           {% elif user.role == 'freelancer' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:accounts_freelancer_dashboard' %}" style="color: var(--slate-200);">
-              <i class="bi bi-speedometer2 me-1"></i>Dashboard
-            </a>
-          </li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'freelancer_dashboard' %}" style="color: var(--slate-200);">
+    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'my_proposals' %}" style="color: var(--slate-200);">
+    <i class="bi bi-send me-1"></i>My Proposals
+  </a>
+</li>
+          
           {% endif %}
 
           <!-- Notification Bell — Added by Member 4 -->
