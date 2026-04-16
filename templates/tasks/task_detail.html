@@ -61,25 +61,43 @@
 
           <!-- client actions — only visible to the client who posted this task -->
           {% if user.is_authenticated and user == task.client %}
-          <div class="d-flex gap-2 pt-3 border-top">
-            {% if task.is_open %}
-              <a href="{% url 'edit_task' task.pk %}" class="btn btn-outline-primary">
-                <i class="bi bi-pencil me-2"></i>Edit Task
-              </a>
-              <!-- cancel uses a small form so we can send a POST request -->
-              <form method="POST" action="{% url 'cancel_task' task.pk %}">
-                {% csrf_token %}
-                <button
-                  type="submit"
-                  class="btn btn-outline-danger"
-                  onclick="return confirm('Are you sure you want to cancel this task?')"
-                >
-                  <i class="bi bi-x-circle me-2"></i>Cancel Task
-                </button>
-              </form>
-            {% endif %}
-          </div>
-          {% endif %}
+<div class="d-flex gap-2 pt-3 border-top flex-wrap">
+  {% if task.is_open %}
+    <a href="{% url 'edit_task' task.pk %}" class="btn btn-outline-primary">
+      <i class="bi bi-pencil me-2"></i>Edit Task
+    </a>
+    <a href="{% url 'view_proposals' task.pk %}" class="btn btn-outline-success">
+      <i class="bi bi-people me-2"></i>View Proposals
+      {% if task.proposal_count > 0 %}
+        ({{ task.proposal_count }})
+      {% endif %}
+    </a>
+    <form method="POST" action="{% url 'cancel_task' task.pk %}">
+      {% csrf_token %}
+      <button
+        type="submit"
+        class="btn btn-outline-danger"
+        onclick="return confirm('Are you sure you want to cancel this task?')"
+      >
+        <i class="bi bi-x-circle me-2"></i>Cancel Task
+      </button>
+    </form>
+  {% endif %}
+  <!-- mark completed button for in progress tasks -->
+  {% if task.status == 'in_progress' %}
+  <form method="POST" action="{% url 'mark_completed' task.pk %}">
+    {% csrf_token %}
+    <button
+      type="submit"
+      class="btn btn-success"
+      onclick="return confirm('Mark this task as completed?')"
+    >
+      <i class="bi bi-check-lg me-2"></i>Mark as Completed
+    </button>
+  </form>
+  {% endif %}
+</div>
+{% endif %}
 
           <!-- apply button — only visible to freelancers on open tasks -->
           {% if user.is_authenticated and user.role == 'freelancer' and task.is_open %}
