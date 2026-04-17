@@ -7,20 +7,20 @@ from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('accounts:login')
 
 
 @login_required
 def client_dashboard(request):
     if request.user.role != 'client':
-        return redirect('login')  # or home
+        return redirect('accounts:login')  # or home
     return render(request, 'accounts/client_dashboard.html')
 
 
 @login_required
 def freelancer_dashboard(request):
     if request.user.role != 'freelancer':
-        return redirect('login')  # or home
+        return redirect('accounts:login')  # or home
     return render(request, 'accounts/freelancer_dashboard.html')
 
 
@@ -29,7 +29,7 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('accounts:login')
     else:
         form = CustomUserCreationForm()
 
@@ -44,9 +44,9 @@ def login_view(request):
             login(request, user)
 
             if user.role == 'client':
-                return redirect('client_dashboard')
+                return redirect('accounts:accounts_client_dashboard')
             elif user.role == 'freelancer':
-                return redirect('freelancer_dashboard')
+                return redirect('accounts:accounts_freelancer_dashboard')
 
             return redirect('home')
     else:
