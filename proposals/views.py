@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Proposal, Review
 from .forms import ProposalForm, RejectForm, ReviewForm
+from tasks.models import Task
 
 @login_required
 def submit_proposal(request, task_id):
@@ -109,3 +110,30 @@ def proposal_detail(request, proposal_id):
     )
     return render(request, 'proposals/proposal_detail.html',
                   {'proposal': proposal})
+@login_required
+def task_proposals(request, task_id):
+    """View all proposals for a specific task (Client only)"""
+    task = get_object_or_404(Task, id=task_id)
+    
+    # Only task owner can view proposals
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to view these proposals.")
+        return redirect('tasks:task_detail', task_id=task.id)
+    
+    # Get all proposals for this task, ordered by submission date
+    proposals = Proposal.objects.filter(task=task).select_related('freelancer').order_by('-created_at')
+    
+    # Count proposals by status
+    total_count = proposals.count()
+    pending_count = proposals.filter(status='pending').count()
+    awarded_count = proposals.filter(status='awarded').count()
+    
+    context = {
+        'task': task,
+        'proposals': proposals,
+        'total_count': total_count,
+        'pending_count': pending_count,
+        'awarded_count': awarded_count,
+    }
+    
+    return render(request, 'proposals/task_proposals.html', context)
