@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+app_name = 'proposals'
 urlpatterns = [
     path('submit/<int:task_id>/', views.submit_proposal, name='submit_proposal'),
     path('mine/', views.my_proposals, name='my_proposals'),
