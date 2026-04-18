@@ -8,19 +8,16 @@
   <div class="row justify-content-center">
     <div class="col-lg-8">
 
-      <!-- page header -->
       <div class="mb-4">
         <h2 class="fw-bold" style="color: var(--slate-800);">Edit Task</h2>
         <p style="color: var(--slate-500);">Update the details of your task below.</p>
       </div>
 
-      <!-- form card -->
       <div class="card border-0 shadow-sm">
         <div class="card-body p-4">
           <form method="POST">
             {% csrf_token %}
 
-            <!-- title -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Task Title</label>
               {{ form.title }}
@@ -29,7 +26,6 @@
               {% endif %}
             </div>
 
-            <!-- description -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Description</label>
               {{ form.description }}
@@ -38,7 +34,6 @@
               {% endif %}
             </div>
 
-            <!-- category -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Category</label>
               {{ form.category }}
@@ -47,7 +42,6 @@
               {% endif %}
             </div>
 
-            <!-- budget range -->
             <div class="row mb-3">
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Minimum Budget ($)</label>
@@ -65,7 +59,6 @@
               </div>
             </div>
 
-            <!-- deadline -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Deadline</label>
               {{ form.deadline }}
@@ -74,7 +67,6 @@
               {% endif %}
             </div>
 
-            <!-- skills -->
             <div class="mb-4">
               <label class="form-label fw-semibold">Skills Required</label>
               <div class="border rounded p-3" style="background: var(--slate-100);">
@@ -96,12 +88,10 @@
               {% endif %}
             </div>
 
-            <!-- form level errors -->
             {% if form.non_field_errors %}
               <div class="alert alert-danger">{{ form.non_field_errors }}</div>
             {% endif %}
 
-            <!-- buttons -->
             <div class="d-flex gap-2">
               <button type="submit" class="btn btn-primary px-4">
                 <i class="bi bi-check-lg me-2"></i>Save Changes

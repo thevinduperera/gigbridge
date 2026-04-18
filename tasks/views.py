@@ -1,3 +1,5 @@
+# tasks/views.py
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -8,8 +10,6 @@ from .forms import TaskForm
 @login_required
 def post_task(request):
     # clients only - freelancers shouldn't be posting tasks
-    # using getattr safely handles the case where Member 1's custom
-    # User model with the role field isn't set up yet
     if getattr(request.user, 'role', None) != 'client':
         messages.error(request, "Only clients can post tasks.")
         return redirect('core:home')
@@ -25,7 +25,7 @@ def post_task(request):
             # otherwise the skills won't get saved
             form.save_m2m()
             messages.success(request, "Your task has been posted successfully!")
-            return redirect('task_detail', pk=task.pk)
+            return redirect('tasks:task_detail', pk=task.pk)
     else:
         form = TaskForm()
 
@@ -68,19 +68,19 @@ def edit_task(request, pk):
     # stop anyone other than the owner from editing
     if request.user != task.client:
         messages.error(request, "You are not allowed to edit this task.")
-        return redirect('task_detail', pk=task.pk)
+        return redirect('tasks:task_detail', pk=task.pk)
 
     # no point editing a task that's already underway
     if not task.is_open():
         messages.error(request, "You can only edit tasks that are still open.")
-        return redirect('task_detail', pk=task.pk)
+        return redirect('tasks:task_detail', pk=task.pk)
 
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             messages.success(request, "Task updated successfully!")
-            return redirect('task_detail', pk=task.pk)
+            return redirect('tasks:task_detail', pk=task.pk)
     else:
         # pre-fill the form with the existing task data
         form = TaskForm(instance=task)
@@ -94,24 +94,23 @@ def cancel_task(request, pk):
 
     if request.user != task.client:
         messages.error(request, "You are not allowed to cancel this task.")
-        return redirect('task_detail', pk=task.pk)
+        return redirect('tasks:task_detail', pk=task.pk)
 
     if not task.is_open():
         messages.error(request, "Only open tasks can be cancelled.")
-        return redirect('task_detail', pk=task.pk)
+        return redirect('tasks:task_detail', pk=task.pk)
 
     if request.method == 'POST':
         task.status = Task.STATUS_CANCELLED
         task.save()
         messages.success(request, "Task has been cancelled.")
-        return redirect('client_dashboard')
+        return redirect('tasks:client_dashboard')
 
-    return redirect('task_detail', pk=task.pk)
+    return redirect('tasks:task_detail', pk=task.pk)
 
 
 @login_required
 def client_dashboard(request):
-    # using getattr safely until Member 1's custom User model is ready
     if getattr(request.user, 'role', None) != 'client':
         messages.error(request, "Access denied.")
         return redirect('core:home')
@@ -130,13 +129,11 @@ def client_dashboard(request):
 
 @login_required
 def freelancer_dashboard(request):
-    # using getattr safely until Member 1's custom User model is ready
     if getattr(request.user, 'role', None) != 'freelancer':
         messages.error(request, "Access denied.")
         return redirect('core:home')
 
-    # submitted_proposals comes from the related_name set in
-    # Member 3's Proposal model - returns empty until that's done
+    # submitted_proposals comes from related_name in Member 3's Proposal model
     proposals = request.user.submitted_proposals.all().select_related('task')
 
     context = {

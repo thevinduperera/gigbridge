@@ -6,22 +6,20 @@
 {% block content %}
 <div class="container py-5">
 
-  <!-- page header -->
- <div class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h2 class="fw-bold mb-1" style="color: var(--slate-800);">
-      Welcome, {{ user.get_full_name|default:user.username }}
-    </h2>
-    <p class="mb-0" style="color: var(--slate-500);">Track your proposals and awarded tasks here.</p>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1" style="color: var(--slate-800);">
+        Welcome, {{ user.get_full_name|default:user.username }}
+      </h2>
+      <p class="mb-0" style="color: var(--slate-500);">Track your proposals and awarded tasks here.</p>
+    </div>
+    <a href="{% url 'proposals:my_proposals' %}" class="btn btn-primary">
+      <i class="bi bi-send me-2"></i>My Proposals
+    </a>
   </div>
-  <a href="{% url 'my_proposals' %}" class="btn btn-primary">
-    <i class="bi bi-send me-2"></i>My Proposals
-  </a>
-</div>
 
   <!-- stats cards -->
   <div class="row g-4 mb-5">
-
     <div class="col-sm-6 col-lg-3">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
@@ -36,7 +34,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-sm-6 col-lg-3">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
@@ -51,7 +48,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-sm-6 col-lg-3">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
@@ -66,7 +62,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-sm-6 col-lg-3">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
@@ -81,7 +76,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- proposals table -->
@@ -89,7 +83,7 @@
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0" style="color: var(--slate-800);">Your Proposals</h5>
-        <a href="{% url 'tasks:task_list' %}" class="btn btn-primary">
+        <a href="{% url 'tasks:task_list' %}" class="btn btn-outline-primary">
           <i class="bi bi-search me-2"></i>Browse Tasks
         </a>
       </div>
@@ -142,7 +136,6 @@
       </div>
 
       {% else %}
-      <!-- empty state -->
       <div class="text-center py-5">
         <i class="bi bi-send display-1" style="color: var(--slate-300);"></i>
         <h5 class="mt-3 fw-bold" style="color: var(--slate-600);">No proposals yet</h5>
