@@ -143,18 +143,18 @@
               <td>
                 <div class="d-flex gap-1">
 
-  <a href="{% url 'task_detail' task.pk %}"
+  <a href="{% url 'tasks:task_detail' task.pk %}"
     class="btn btn-sm btn-outline-primary">
     View
   </a>
   {% if task.is_open %}
-  <a href="{% url 'edit_task' task.pk %}"
+  <a href="{% url 'tasks:edit_task' task.pk %}"
     class="btn btn-sm btn-outline-secondary">
     Edit
   </a>
   {% endif %}
   <!-- link to view all proposals for this task -->
-  <a href="{% url 'view_proposals' task.pk %}"
+  <a href="{% url 'proposals:view_proposals' task.pk %}"
     class="btn btn-sm btn-outline-success">
     <i class="bi bi-people me-1"></i>Proposals
     {% if task.proposal_count > 0 %}
@@ -166,7 +166,7 @@
   </a>
   <!-- mark completed button - only for in progress tasks -->
   {% if task.status == 'in_progress' %}
-  <form method="POST" action="{% url 'mark_completed' task.pk %}" class="d-inline">
+  <form method="POST" action="{% url 'tasks:mark_completed' task.pk %}" class="d-inline">
     {% csrf_token %}
     <button type="submit"
       class="btn btn-sm btn-success"
@@ -177,7 +177,12 @@
   {% endif %}
 </div>
                 
+<<<<<<< HEAD
 
+=======
+=======
+>>>>>>> dev
+>>>>>>> feature/core-ui
                   <a href="{% url 'tasks:task_detail' task.pk %}"
                     class="btn btn-sm btn-outline-primary">
                     View
