@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load proposal_filters %}
 {% block title %}Proposals for {{ task.title }} - GigBridge{% endblock %}
 
 {% block content %}
@@ -106,15 +106,15 @@
                                 {% endif %}
 
                                 <!-- Skills -->
-                                {% if proposal.freelancer.skills %}
-                                <div class="d-flex gap-2 flex-wrap mb-2">
-                                    {% for skill in proposal.freelancer.skills.split ',' %}
-                                    <span class="badge" style="background-color: var(--slate-100); color: var(--slate-700);">
-                                        {{ skill|trim }}
-                                    </span>
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
+                                    {% if proposal.freelancer.skills %}
+                                        <div class="d-flex gap-2 flex-wrap mb-2">
+                                             {% for skill in proposal.freelancer.skills|split:',' %}
+                                             <span class="badge" style="background-color: var(--slate-100); color: var(--slate-700);">
+                                              {{ skill }}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
 
                                 <!-- Rate -->
                                 {% if proposal.freelancer.hourly_rate %}
