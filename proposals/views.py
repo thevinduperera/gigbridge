@@ -174,3 +174,25 @@ def award_proposal(request, proposal_id):
     
     messages.success(request, f"Proposal awarded to {proposal.freelancer.get_full_name()}!")
     return redirect('proposals:task_proposals', task_id=task.id)
+@login_required
+def reject_proposal(request, proposal_id):
+    """Reject a proposal (Client only)"""
+    proposal = get_object_or_404(Proposal, id=proposal_id)
+    task = proposal.task
+    
+    # Only task owner can reject
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to reject this proposal.")
+        return redirect('tasks:task_detail', task_id=task.id)
+    
+    # Check if proposal is still pending
+    if proposal.status != 'pending':
+        messages.error(request, "This proposal has already been processed.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Reject the proposal
+    proposal.status = 'rejected'
+    proposal.save()
+    
+    messages.success(request, "Proposal rejected.")
+    return redirect('proposals:task_proposals', task_id=task.id)
