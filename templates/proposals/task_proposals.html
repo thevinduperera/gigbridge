@@ -185,14 +185,25 @@
                         <!-- Action Buttons -->
                         {% if proposal.status == 'pending' %}
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary" disabled>
-                                <i class="bi bi-award"></i> Award Task
-                            </button>
-                            <button class="btn btn-outline-danger" disabled>
-                                <i class="bi bi-x-circle"></i> Reject
-                            </button>
+                            <!-- Award Button -->
+                            <form method="post" action="{% url 'proposals:award_proposal' proposal.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" 
+                                        onclick="return confirm('Award this task to {{ proposal.freelancer.get_full_name }}?')">
+                                    <i class="bi bi-award"></i> Award Task
+                                </button>
+                            </form>
+    
+                            <!-- Reject Button -->
+                            <form method="post" action="{% url 'proposals:reject_proposal' proposal.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger" 
+                                        onclick="return confirm('Reject this proposal?')">
+                                    <i class="bi bi-x-circle"></i> Reject
+                                </button>
+                            </form>
                         </div>
-                        {% endif %}
+                    {% endif %}
                     </div>
                 </div>
             </div>
