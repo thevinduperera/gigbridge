@@ -31,7 +31,6 @@
                 <i class="bi bi-circle-fill me-1" style="font-size: 8px;"></i>Cancelled
               </span>
             {% endif %}
-
             {% if task.category %}
             <span class="badge rounded-pill px-3 py-2" style="background: var(--slate-100); color: var(--slate-600);">
               <i class="bi {{ task.category.icon }} me-1"></i>{{ task.category.name }}
@@ -59,73 +58,41 @@
           </div>
           {% endif %}
 
-          <!-- client actions — only visible to the client who posted this task -->
+          <!-- client actions -->
           {% if user.is_authenticated and user == task.client %}
-          
-<div class="d-flex gap-2 pt-3 border-top flex-wrap">
-  {% if task.is_open %}
-    <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-outline-primary">
-      <i class="bi bi-pencil me-2"></i>Edit Task
-    </a>
-    <a href="{% url 'proposals:view_proposals' task.pk %}" class="btn btn-outline-success">
-      <i class="bi bi-people me-2"></i>View Proposals
-      {% if task.proposal_count > 0 %}
-        ({{ task.proposal_count }})
-      {% endif %}
-    </a>
-    <form method="POST" action="{% url 'cancel_task' task.pk %}">
-      {% csrf_token %}
-      <button
-        type="submit"
-        class="btn btn-outline-danger"
-        onclick="return confirm('Are you sure you want to cancel this task?')"
-      >
-        <i class="bi bi-x-circle me-2"></i>Cancel Task
-      </button>
-    </form>
-  {% endif %}
-  <!-- mark completed button for in progress tasks -->
-  {% if task.status == 'in_progress' %}
-  <form method="POST" action="{% url 'tasks:mark_completed' task.pk %}">
-    {% csrf_token %}
-    <button
-      type="submit"
-      class="btn btn-success"
-      onclick="return confirm('Mark this task as completed?')"
-    >
-      <i class="bi bi-check-lg me-2"></i>Mark as Completed
-    </button>
-  </form>
-  {% endif %}
-</div>
-{% endif %}
-
-          <div class="d-flex gap-2 pt-3 border-top">
+          <div class="d-flex gap-2 pt-3 border-top flex-wrap">
             {% if task.is_open %}
               <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-outline-primary">
                 <i class="bi bi-pencil me-2"></i>Edit Task
               </a>
-              <!-- cancel uses a small form so we can send a POST request -->
-              <form method="POST" action="{% url 'cancel_task' task.pk %}">
+              <a href="{% url 'proposals:view_proposals' task.pk %}" class="btn btn-outline-success">
+                <i class="bi bi-people me-2"></i>View Proposals
+                {% if task.proposal_count > 0 %}({{ task.proposal_count }}){% endif %}
+              </a>
+              <form method="POST" action="{% url 'tasks:cancel_task' task.pk %}">
                 {% csrf_token %}
-                <button
-                  type="submit"
-                  class="btn btn-outline-danger"
-                  onclick="return confirm('Are you sure you want to cancel this task?')"
-                >
+                <button type="submit" class="btn btn-outline-danger"
+                  onclick="return confirm('Are you sure you want to cancel this task?')">
                   <i class="bi bi-x-circle me-2"></i>Cancel Task
                 </button>
               </form>
             {% endif %}
+            {% if task.status == 'in_progress' %}
+            <form method="POST" action="{% url 'proposals:mark_completed' task.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success"
+                onclick="return confirm('Mark this task as completed?')">
+                <i class="bi bi-check-lg me-2"></i>Mark as Completed
+              </button>
+            </form>
+            {% endif %}
           </div>
           {% endif %}
 
-
-          <!-- apply button — only visible to freelancers on open tasks -->
+          <!-- apply button for freelancers -->
           {% if user.is_authenticated and user.role == 'freelancer' and task.is_open %}
           <div class="pt-3 border-top">
-            <!-- this links to the submit proposal page built by Member 3 -->
-            <a href="{% url 'submit_proposal' task.pk %}" class="btn btn-primary px-4">
+            <a href="{% url 'proposals:submit_proposal' task.pk %}" class="btn btn-primary px-4">
               <i class="bi bi-send me-2"></i>Apply Now
             </a>
           </div>
@@ -142,9 +109,7 @@
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-body p-4">
           <h6 class="fw-bold mb-3" style="color: var(--slate-700);">Task Details</h6>
-
           <div class="d-flex flex-column gap-3">
-
             <div class="d-flex justify-content-between">
               <span style="color: var(--slate-500);">
                 <i class="bi bi-cash me-2"></i>Budget
@@ -153,7 +118,6 @@
                 {{ task.budget_display }}
               </span>
             </div>
-
             <div class="d-flex justify-content-between">
               <span style="color: var(--slate-500);">
                 <i class="bi bi-calendar me-2"></i>Deadline
@@ -162,7 +126,6 @@
                 {{ task.deadline }}
               </span>
             </div>
-
             <div class="d-flex justify-content-between">
               <span style="color: var(--slate-500);">
                 <i class="bi bi-file-text me-2"></i>Proposals
@@ -171,7 +134,6 @@
                 {{ task.proposal_count }}
               </span>
             </div>
-
             <div class="d-flex justify-content-between">
               <span style="color: var(--slate-500);">
                 <i class="bi bi-clock me-2"></i>Posted
@@ -180,7 +142,6 @@
                 {{ task.created_at|date:"M d, Y" }}
               </span>
             </div>
-
           </div>
         </div>
       </div>
@@ -190,7 +151,6 @@
         <div class="card-body p-4">
           <h6 class="fw-bold mb-3" style="color: var(--slate-700);">Posted By</h6>
           <div class="d-flex align-items-center gap-3">
-            <!-- default avatar until M1 sets up profile pictures -->
             <img
               src="{% static 'images/default-avatar.svg' %}"
               alt="Client"
