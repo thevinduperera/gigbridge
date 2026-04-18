@@ -8,7 +8,7 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('tasks/', include('tasks.urls', namespace='tasks')),
-    # path('proposals/', include('proposals.urls', namespace='proposals')),
+    path('proposals/', include('proposals.urls', namespace='proposals')),
 ]
 
 if settings.DEBUG:
