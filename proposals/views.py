@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Proposal, Review
 from .forms import ProposalForm, RejectForm, ReviewForm
 from tasks.models import Task
+from django.db import transaction
 
 @login_required
 def submit_proposal(request, task_id):
@@ -137,3 +138,39 @@ def task_proposals(request, task_id):
     }
     
     return render(request, 'proposals/task_proposals.html', context)
+@login_required
+def award_proposal(request, proposal_id):
+    """Award a proposal to a freelancer (Client only)"""
+    proposal = get_object_or_404(Proposal, id=proposal_id)
+    task = proposal.task
+    
+    # Only task owner can award
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to award this proposal.")
+        return redirect('tasks:task_detail', task_id=task.id)
+    
+    # Check if task is still open
+    if task.status != 'open':
+        messages.error(request, "This task is no longer open for proposals.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Check if proposal is still pending
+    if proposal.status != 'pending':
+        messages.error(request, "This proposal has already been processed.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Award the proposal (atomic transaction)
+    with transaction.atomic():
+        # Update proposal status
+        proposal.status = 'awarded'
+        proposal.save()
+        
+        # Update task status
+        task.status = 'in_progress'
+        task.save()
+        
+        # Reject all other pending proposals for this task
+        Proposal.objects.filter(task=task, status='pending').exclude(id=proposal.id).update(status='rejected')
+    
+    messages.success(request, f"Proposal awarded to {proposal.freelancer.get_full_name()}!")
+    return redirect('proposals:task_proposals', task_id=task.id)
