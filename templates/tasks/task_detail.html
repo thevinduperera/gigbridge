@@ -64,10 +64,10 @@
           
 <div class="d-flex gap-2 pt-3 border-top flex-wrap">
   {% if task.is_open %}
-    <a href="{% url 'edit_task' task.pk %}" class="btn btn-outline-primary">
+    <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-outline-primary">
       <i class="bi bi-pencil me-2"></i>Edit Task
     </a>
-    <a href="{% url 'view_proposals' task.pk %}" class="btn btn-outline-success">
+    <a href="{% url 'proposals:view_proposals' task.pk %}" class="btn btn-outline-success">
       <i class="bi bi-people me-2"></i>View Proposals
       {% if task.proposal_count > 0 %}
         ({{ task.proposal_count }})
@@ -86,7 +86,7 @@
   {% endif %}
   <!-- mark completed button for in progress tasks -->
   {% if task.status == 'in_progress' %}
-  <form method="POST" action="{% url 'mark_completed' task.pk %}">
+  <form method="POST" action="{% url 'tasks:mark_completed' task.pk %}">
     {% csrf_token %}
     <button
       type="submit"
