@@ -89,14 +89,34 @@
           </div>
           {% endif %}
 
-          <!-- apply button for freelancers -->
-          {% if user.is_authenticated and user.role == 'freelancer' and task.is_open %}
-          <div class="pt-3 border-top">
-            <a href="{% url 'proposals:submit_proposal' task.pk %}" class="btn btn-primary px-4">
-              <i class="bi bi-send me-2"></i>Apply Now
-            </a>
-          </div>
-          {% endif %}
+          <!-- apply button — shows different content based on auth state and role -->
+{% if task.is_open %}
+<div class="pt-3 border-top">
+  {% if not user.is_authenticated %}
+    <!-- not logged in — prompt to login -->
+    <p class="mb-2" style="color: var(--slate-500);">
+      <i class="bi bi-lock me-1"></i>You need to be logged in to apply for this task.
+    </p>
+    <a href="{% url 'accounts:login' %}?next={{ request.path }}"
+      class="btn btn-primary px-4">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Login to Apply
+    </a>
+    <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary px-4 ms-2">
+      Sign Up Free
+    </a>
+  {% elif user.role == 'freelancer' %}
+    <!-- logged in as freelancer — show apply button -->
+    <a href="{% url 'proposals:submit_proposal' task.pk %}" class="btn btn-primary px-4">
+      <i class="bi bi-send me-2"></i>Apply Now
+    </a>
+  {% elif user.role == 'client' and user != task.client %}
+    <!-- logged in as a different client — can't apply -->
+    <p class="mb-0" style="color: var(--slate-500);">
+      <i class="bi bi-info-circle me-1"></i>Clients cannot apply for tasks.
+    </p>
+  {% endif %}
+</div>
+{% endif %}
 
         </div>
       </div>
