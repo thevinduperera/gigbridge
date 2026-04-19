@@ -47,11 +47,21 @@ def task_list(request):
     if category_slug:
         tasks = tasks.filter(category__slug=category_slug)
 
+    # handle budget filter
+    budget_min = request.GET.get('budget_min')
+    budget_max = request.GET.get('budget_max')
+    if budget_min:
+        tasks = tasks.filter(budget_max__gte=budget_min)
+    if budget_max:
+        tasks = tasks.filter(budget_min__lte=budget_max)
+
     context = {
         'tasks':         tasks,
         'categories':    categories,
         'query':         query,
         'category_slug': category_slug,
+        'budget_min':    budget_min,
+        'budget_max':    budget_max,
     }
     return render(request, 'tasks/task_list.html', context)
 
