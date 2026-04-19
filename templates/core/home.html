@@ -1,8 +1,199 @@
-{% extends 'base.html' %}
-{% block title %}Home — GigBridge{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}GigBridge — Connecting Talent with Opportunity{% endblock %}
+
 {% block content %}
-<div class="container text-center mt-5">
-  <h1>Welcome to GigBridge</h1>
-  <p>Connecting Talent with Opportunity</p>
-</div>
+
+<!-- HERO -->
+<section class="gb-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="gb-hero-badge">
+                    <span class="gb-live-dot"></span>
+                    3,200+ freelancers online
+                </div>
+                <h1 class="display-4 fw-bold mb-4">
+                    Find the Right Talent
+                    <span class="gb-text-teal">Fast.</span>
+                </h1>
+                <p class="lead mb-4 text-muted">
+                    Post a task, receive proposals within hours, and hire the best freelancer for your project.
+                </p>
+                <div class="d-flex gap-3 flex-wrap mb-4">
+                    <a href="/accounts/register/" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+                    </a>
+                    <a href="/accounts/login/" class="btn btn-outline-light btn-lg px-4">
+                        Log In
+                    </a>
+                </div>
+                <div class="d-flex gap-4">
+                    <div>
+                        <p class="fw-bold fs-5 mb-0 text-white">1,200+</p>
+                        <p class="small mb-0 text-muted">Tasks Posted</p>
+                    </div>
+                    <div class="gb-stat-divider"></div>
+                    <div>
+                        <p class="fw-bold fs-5 mb-0 text-white">3,200+</p>
+                        <p class="small mb-0 text-muted">Freelancers</p>
+                    </div>
+                    <div class="gb-stat-divider"></div>
+                    <div>
+                        <p class="fw-bold fs-5 mb-0 text-white">98%</p>
+                        <p class="small mb-0 text-muted">Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS STRIP -->
+<section class="gb-stats-strip">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-6 col-md-3">
+                <p class="fs-2 fw-bold gb-text-teal mb-0" data-count="1200">0</p>
+                <p class="small text-muted mb-0">Tasks Posted</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <p class="fs-2 fw-bold gb-text-teal mb-0" data-count="3200">0</p>
+                <p class="small text-muted mb-0">Freelancers</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <p class="fs-2 fw-bold gb-text-teal mb-0" data-count="980">0</p>
+                <p class="small text-muted mb-0">Completed</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <p class="fs-2 fw-bold gb-text-teal mb-0" data-count="98">0</p>
+                <p class="small text-muted mb-0">% Satisfaction</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="padding: 5rem 0; background: white;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="gb-section-label">Simple Process</span>
+            <h2 class="display-6 fw-bold mt-2">How GigBridge Works</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="gb-step-card h-100">
+                    <div class="gb-step-number">1</div>
+                    <div class="gb-step-icon"><i class="bi bi-pencil-square"></i></div>
+                    <h5 class="fw-semibold mb-2">Post Your Task</h5>
+                    <p class="text-muted small mb-0">Describe your project, set your budget, and let freelancers come to you.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="gb-step-card h-100">
+                    <div class="gb-step-number">2</div>
+                    <div class="gb-step-icon"><i class="bi bi-file-earmark-text"></i></div>
+                    <h5 class="fw-semibold mb-2">Receive Proposals</h5>
+                    <p class="text-muted small mb-0">Review proposals with cover letters, pricing, and freelancer profiles.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="gb-step-card h-100">
+                    <div class="gb-step-number">3</div>
+                    <div class="gb-step-icon"><i class="bi bi-person-check"></i></div>
+                    <h5 class="fw-semibold mb-2">Award the Task</h5>
+                    <p class="text-muted small mb-0">Choose the best freelancer and award them the project with one click.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="gb-step-card h-100">
+                    <div class="gb-step-number">4</div>
+                    <div class="gb-step-icon"><i class="bi bi-star-fill"></i></div>
+                    <h5 class="fw-semibold mb-2">Review & Repeat</h5>
+                    <p class="text-muted small mb-0">Mark it complete, leave a review, and build long-term relationships.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<section style="background: var(--slate-100); padding: 5rem 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="gb-section-label">Explore</span>
+            <h2 class="display-6 fw-bold mt-2">Browse by Category</h2>
+        </div>
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-code-slash"></i></div>
+                    <span class="fw-semibold">Web Development</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-palette"></i></div>
+                    <span class="fw-semibold">Graphic Design</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-pencil"></i></div>
+                    <span class="fw-semibold">Writing</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-phone"></i></div>
+                    <span class="fw-semibold">Mobile Apps</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-bar-chart-line"></i></div>
+                    <span class="fw-semibold">Data & Analytics</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-megaphone"></i></div>
+                    <span class="fw-semibold">Marketing</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-play-circle"></i></div>
+                    <span class="fw-semibold">Video & Animation</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/tasks/" class="gb-category-card">
+                    <div class="gb-category-icon"><i class="bi bi-calculator"></i></div>
+                    <span class="fw-semibold">Accounting</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="gb-cta-section">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold text-white mb-3">Ready to Get Started?</h2>
+        <p class="lead mb-4" style="color: rgba(255,255,255,0.75);">
+            Join thousands of freelancers and clients already on GigBridge.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/accounts/register/" class="btn btn-light btn-lg px-4 fw-semibold">
+                <i class="bi bi-person-plus me-2"></i>Create Free Account
+            </a>
+            <a href="/accounts/login/" class="btn btn-outline-light btn-lg px-4">
+                Log In
+            </a>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

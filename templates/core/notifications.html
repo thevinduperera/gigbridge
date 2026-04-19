@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Notifications — GigBridge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold mb-0">Notifications</h3>
+                    {% if unread_count > 0 %}
+                    <p class="small mb-0" style="color: var(--slate-500);">
+                        {{ unread_count }} unread
+                    </p>
+                    {% endif %}
+                </div>
+                {% if notifications %}
+                <a href="{% url 'core:mark_all_read' %}"
+                   class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-check2-all me-1"></i>Mark All Read
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Notification List -->
+            {% if notifications %}
+                {% for notif in notifications %}
+                <div class="gb-notif-item {% if not notif.is_read %}gb-notif-unread{% endif %} mb-2">
+                    <div class="d-flex align-items-start gap-3">
+
+                        <!-- Icon -->
+                        <div class="gb-notif-icon gb-notif-icon-{{ notif.notif_type }}">
+                            <i class="bi bi-{% if notif.notif_type == 'award' %}trophy
+                                {% elif notif.notif_type == 'reject' %}x-circle
+                                {% elif notif.notif_type == 'proposal' %}file-earmark-text
+                                {% elif notif.notif_type == 'review' %}star
+                                {% else %}bell{% endif %}">
+                            </i>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="flex-grow-1">
+                            <p class="mb-1 {% if not notif.is_read %}fw-semibold{% endif %}">
+                                {{ notif.message }}
+                            </p>
+                            <p class="small mb-0" style="color: var(--slate-500);">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ notif.created_at|timesince }} ago
+                            </p>
+                        </div>
+
+                        <!-- Unread dot -->
+                        {% if not notif.is_read %}
+                        <span class="gb-unread-dot"></span>
+                        {% endif %}
+                    </div>
+
+                    {% if notif.link %}
+                    <div class="mt-2 ms-5">
+                        <a href="{{ notif.link }}" class="btn btn-sm btn-outline-primary">
+                            View Details
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+            {% else %}
+                <!-- Empty State -->
+                <div class="text-center py-5">
+                    <i class="bi bi-bell-slash display-4 d-block mb-3"
+                       style="color: var(--slate-500);"></i>
+                    <h5 class="fw-semibold">All caught up!</h5>
+                    <p style="color: var(--slate-500);">
+                        No notifications yet. We'll let you know when something happens.
+                    </p>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
