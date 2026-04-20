@@ -12,7 +12,16 @@ class CustomUserCreationForm(UserCreationForm):
 class FreelancerProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'bio', 'profile_picture']
+        fields = [
+            'username',
+            'headline',
+            'bio',
+            'skills',
+            'rate',
+            'portfolio',
+            'availability',
+            'profile_picture',
+        ]
 
 
 class ClientProfileForm(forms.ModelForm):

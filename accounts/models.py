@@ -16,5 +16,11 @@ class User(AbstractUser):
     website = models.URLField(blank=True)
     location = models.CharField(max_length=255, blank=True)
 
+    headline = models.CharField(max_length=255, blank=True)
+    rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    portfolio = models.URLField(blank=True)
+    availability = models.CharField(max_length=100, blank=True)
+    skills = models.CharField(max_length=255, blank=True)
+
     def __str__(self):
         return self.username
