@@ -1,0 +1,32 @@
+<h2>Edit Freelancer Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+
+    <!-- Preview -->
+    <div>
+        <h4>Preview</h4>
+        <img id="previewImage" src="#" style="display:none;" width="150">
+    </div>
+
+    <button type="submit">Save Profile</button>
+</form>
+
+{% if request.user.profile_picture %}
+    <h3>Current Profile Picture</h3>
+    <img src="{{ request.user.profile_picture.url }}" width="150">
+{% endif %}
+
+<script>
+document.querySelector('input[type="file"]').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('previewImage');
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    }
+});
+</script>

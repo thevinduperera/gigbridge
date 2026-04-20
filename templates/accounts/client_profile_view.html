@@ -1,0 +1,14 @@
+<h2>Client Profile</h2>
+
+{% if user_profile.profile_picture %}
+    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" width="150">
+{% else %}
+    <p>No profile picture uploaded.</p>
+{% endif %}
+
+<p><strong>Username:</strong> {{ user_profile.username }}</p>
+<p><strong>Company Name:</strong> {{ user_profile.company_name }}</p>
+<p><strong>Website:</strong> {{ user_profile.website }}</p>
+<p><strong>Location:</strong> {{ user_profile.location }}</p>
+
+<a href="{% url 'accounts:client_profile_edit' %}">Edit Profile</a>

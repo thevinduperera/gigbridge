@@ -1,0 +1,12 @@
+<h2>Edit Client Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Profile</button>
+</form>
+
+{% if request.user.profile_picture %}
+    <h3>Current Profile Picture</h3>
+    <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" width="150">
+{% endif %}
