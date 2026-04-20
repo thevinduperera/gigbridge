@@ -9,4 +9,6 @@
 {% if request.user.profile_picture %}
     <h3>Current Profile Picture</h3>
     <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" width="150">
+{% else %}
+    <p>No profile picture uploaded.</p>
 {% endif %}

@@ -1,7 +1,20 @@
 <h2>{{ user_profile.username }}</h2>
 
 {% if user_profile.profile_picture %}
-    <img src="{{ user_profile.profile_picture.url }}" width="150">
+    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" width="150">
+{% else %}
+    <p>No profile picture uploaded.</p>
 {% endif %}
 
-<p>{{ user_profile.bio }}</p>
+<p><strong>Headline:</strong> {{ user_profile.headline }}</p>
+<p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+<p><strong>Skills:</strong> {{ user_profile.skills }}</p>
+<p><strong>Rate:</strong> {{ user_profile.rate }}</p>
+<p><strong>Portfolio:</strong>
+    {% if user_profile.portfolio %}
+        <a href="{{ user_profile.portfolio }}" target="_blank">{{ user_profile.portfolio }}</a>
+    {% else %}
+        Not provided
+    {% endif %}
+</p>
+<p><strong>Availability:</strong> {{ user_profile.availability }}</p>
