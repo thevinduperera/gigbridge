@@ -171,13 +171,24 @@
         <div class="card-body p-4">
           <h6 class="fw-bold mb-3" style="color: var(--slate-700);">Posted By</h6>
           <div class="d-flex align-items-center gap-3">
-            <img
-              src="{% static 'images/default-avatar.svg' %}"
-              alt="Client"
-              class="rounded-circle"
-              width="48" height="48"
-              style="object-fit: cover;"
-            />
+            <!-- show profile picture if uploaded, otherwise show default avatar -->
+{% if task.client.profile_picture %}
+<img
+  src="{{ task.client.profile_picture.url }}"
+  alt="{{ task.client.username }}"
+  class="rounded-circle"
+  width="48" height="48"
+  style="object-fit: cover;"
+/>
+{% else %}
+<img
+  src="{% static 'images/default-avatar.svg' %}"
+  alt="Client"
+  class="rounded-circle"
+  width="48" height="48"
+  style="object-fit: cover;"
+/>
+{% endif %}
             <div>
               <p class="fw-semibold mb-0" style="color: var(--slate-800);">
                 {{ task.client.get_full_name|default:task.client.username }}
@@ -191,4 +202,11 @@
     </div>
   </div>
 </div>
+
+<style>
+  body {
+    background-color: var(--slate-100) !important;
+  }
+</style>
+
 {% endblock %}
