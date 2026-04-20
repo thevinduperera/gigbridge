@@ -6,3 +6,8 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'role', 'password1', 'password2']
+
+class FreelancerProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'bio', 'profile_picture']
