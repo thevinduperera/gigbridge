@@ -27,6 +27,34 @@
         </div>
     </div>
 
+<hr>
+
+<div class="row mt-4">
+    {% for freelancer in freelancers %}
+    <div class="col-md-4 mb-4">
+        <div class="card p-3 shadow-sm">
+
+            {% if freelancer.profile_picture %}
+                <img src="{{ freelancer.profile_picture.url }}" class="img-fluid mb-2" style="height:150px; object-fit:cover;">
+            {% endif %}
+
+            <h5>{{ freelancer.username }}</h5>
+            <p>{{ freelancer.headline }}</p>
+            <p><strong>Skills:</strong> {{ freelancer.skills }}</p>
+            <p><strong>Rate:</strong> {{ freelancer.rate }}</p>
+            <p><strong>Availability:</strong> {{ freelancer.availability }}</p>
+
+            <a href="{% url 'accounts:public_freelancer_profile' freelancer.username %}" class="btn btn-sm btn-primary">
+                View Profile
+            </a>
+
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-center mt-4">No freelancers found.</p>
+    {% endfor %}
+</div>
+
     <!-- Results -->
     <div class="row g-4">
         {% for freelancer in freelancers %}
@@ -75,7 +103,7 @@
                     {% else %}
                     <span class="small" style="color: var(--slate-500);">Rate negotiable</span>
                     {% endif %}
-                    <a href="{% url 'accounts:freelancer_profile' freelancer.pk %}"
+                    <a href="{% url 'accounts:public_freelancer_profile' freelancer.username %}"
                        class="btn btn-outline-primary btn-sm">View Profile</a>
                 </div>
             </div>
