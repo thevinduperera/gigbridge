@@ -72,9 +72,15 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0">
               <li>
-                <a class="dropdown-item" href="#">
-                  <i class="bi bi-person me-2"></i>My Profile
-                </a>
+                {% if user.role == 'client' %}
+                  <a class="dropdown-item" href="{% url 'accounts:client_profile_view' %}">
+                    <i class="bi bi-person me-2"></i>My Profile
+                  </a>
+                {% elif user.role == 'freelancer' %}
+                  <a class="dropdown-item" href="{% url 'accounts:freelancer_profile_view' %}">
+                    <i class="bi bi-person me-2"></i>My Profile
+                  </a>
+                {% endif %}
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
