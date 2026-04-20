@@ -76,24 +76,24 @@
               <span style="color: var(--slate-200);">{{ user.username }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-  <li>
-    {% if user.role == 'freelancer' %}
-    <a class="dropdown-item" href="{% url 'accounts:freelancer_profile_view' %}">
-      <i class="bi bi-person me-2"></i>My Profile
-    </a>
-    {% elif user.role == 'client' %}
-    <a class="dropdown-item" href="#">
-      <i class="bi bi-person me-2"></i>My Profile
-    </a>
-    {% endif %}
-  </li>
-  <li><hr class="dropdown-divider"></li>
-  <li>
-    <a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
-      <i class="bi bi-box-arrow-right me-2"></i>Logout
-    </a>
-  </li>
-</ul>
+              <li>
+                {% if user.role == 'client' %}
+                  <a class="dropdown-item" href="{% url 'accounts:client_profile_view' %}">
+                    <i class="bi bi-person me-2"></i>My Profile
+                  </a>
+                {% elif user.role == 'freelancer' %}
+                  <a class="dropdown-item" href="{% url 'accounts:freelancer_profile_view' %}">
+                    <i class="bi bi-person me-2"></i>My Profile
+                  </a>
+                {% endif %}
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
+                  <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </a>
+              </li>
+            </ul>
           </li>
         {% else %}
           <!-- Not logged in -->

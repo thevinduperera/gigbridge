@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
-from .forms import CustomUserCreationForm, FreelancerProfileForm
+from .forms import CustomUserCreationForm, FreelancerProfileForm, ClientProfileForm
 from .models import User
 
 
@@ -72,4 +72,29 @@ def public_freelancer_profile_view(request, username):
 
     return render(request, 'accounts/public_freelancer_profile.html', {
         'user_profile': user_profile
+    })
+
+@login_required
+def client_profile_edit_view(request):
+    if request.user.role != 'client':
+        return redirect('core:home')
+
+    if request.method == 'POST':
+        form = ClientProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:client_profile_view')
+    else:
+        form = ClientProfileForm(instance=request.user)
+
+    return render(request, 'accounts/client_profile_edit.html', {'form': form})
+
+
+@login_required
+def client_profile_view(request):
+    if request.user.role != 'client':
+        return redirect('core:home')
+
+    return render(request, 'accounts/client_profile_view.html', {
+        'user_profile': request.user
     })

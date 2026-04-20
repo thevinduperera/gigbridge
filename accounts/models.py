@@ -12,5 +12,9 @@ class User(AbstractUser):
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
 
+    company_name = models.CharField(max_length=255, blank=True)
+    website = models.URLField(blank=True)
+    location = models.CharField(max_length=255, blank=True)
+
     def __str__(self):
         return self.username
