@@ -56,30 +56,65 @@ def view_proposals(request, task_id):
 
 @login_required
 def award_proposal(request, proposal_id):
+    """Award a proposal to a freelancer (Client only)"""
     proposal = get_object_or_404(Proposal, id=proposal_id)
-    proposal.status = 'awarded'
-    proposal.save()
-    proposal.task.status = 'in_progress'
-    proposal.task.save()
-    messages.success(request, 'Task awarded successfully!')
-    return redirect('view_proposals', task_id=proposal.task.id)
+    task = proposal.task
+    
+    # Only task owner can award
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to award this proposal.")
+        return redirect('tasks:task_detail', task_id=task.id)
+    
+    # Check if task is still open
+    if task.status != 'open':
+        messages.error(request, "This task is no longer open for proposals.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Check if proposal is still pending
+    if proposal.status != 'pending':
+        messages.error(request, "This proposal has already been processed.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Award the proposal (atomic transaction)
+    from django.db import transaction
+    
+    with transaction.atomic():
+        # Update proposal status
+        proposal.status = 'awarded'
+        proposal.save()
+        
+        # Update task status
+        task.status = 'in_progress'
+        task.save()
+        
+        # Reject all other pending proposals for this task
+        Proposal.objects.filter(task=task, status='pending').exclude(id=proposal.id).update(status='rejected')
+    
+    messages.success(request, f"Proposal awarded to {proposal.freelancer.get_full_name()}!")
+    return redirect('proposals:task_proposals', task_id=task.id)
 
 @login_required
 def reject_proposal(request, proposal_id):
+    """Reject a proposal (Client only)"""
     proposal = get_object_or_404(Proposal, id=proposal_id)
-    if request.method == 'POST':
-        form = RejectForm(request.POST)
-        if form.is_valid():
-            proposal.status = 'rejected'
-            proposal.reject_reason = form.cleaned_data['reason']
-            proposal.save()
-            messages.info(request, 'Proposal rejected.')
-            return redirect('view_proposals', task_id=proposal.task.id)
-    else:
-        form = RejectForm()
-    return render(request, 'proposals/reject_proposal.html',
-                  {'form': form, 'proposal': proposal})
-
+    task = proposal.task
+    
+    # Only task owner can reject
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to reject this proposal.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Check if proposal is still pending
+    if proposal.status != 'pending':
+        messages.error(request, "This proposal has already been processed.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Reject the proposal
+    proposal.status = 'rejected'
+    proposal.save()
+    
+    messages.success(request, "Proposal rejected.")
+    return redirect('proposals:task_proposals', task_id=task.id)
 @login_required
 def mark_completed(request, task_id):
     from tasks.models import Task
