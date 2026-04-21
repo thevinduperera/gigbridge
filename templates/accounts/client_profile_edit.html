@@ -1,12 +1,89 @@
-<h2>Edit Client Profile</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Profile</button>
-</form>
+{% block title %}Edit Client Profile — GigBridge{% endblock %}
 
-{% if request.user.profile_picture %}
-    <h3>Current Profile Picture</h3>
-    <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" width="150">
-{% endif %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="text-center mb-4">
+        <i class="bi bi-building mb-3" style="font-size: 2.5rem; color: var(--teal-600);"></i>
+        <h2 class="fw-bold" style="color: var(--slate-800);">Edit Client Profile</h2>
+        <p style="color: var(--slate-500);">Update your company details and profile picture</p>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="text-center mb-4">
+              {% if request.user.profile_picture %}
+                <img
+                  id="previewImage"
+                  src="{{ request.user.profile_picture.url }}"
+                  alt="Profile Picture"
+                  class="rounded-circle border"
+                  style="width: 140px; height: 140px; object-fit: cover;"
+                />
+              {% else %}
+                <img
+                  id="previewImage"
+                  src="#"
+                  alt="Profile Picture Preview"
+                  class="rounded-circle border d-none"
+                  style="width: 140px; height: 140px; object-fit: cover;"
+                />
+              {% endif %}
+            </div>
+
+            {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="color: var(--slate-700);">
+                {{ field.label }}
+              </label>
+              {{ field }}
+              {% if field.errors %}
+              <div class="text-danger small mt-1">
+                {{ field.errors|join:", " }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-save me-2"></i>Save Profile
+              </button>
+              <a href="{% url 'accounts:client_profile_view' %}" class="btn btn-outline-secondary px-4">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelector('input[type="file"]').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('previewImage');
+
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove('d-none');
+    }
+  });
+</script>
+
+<style>
+  body {
+    background-color: var(--slate-100) !important;
+  }
+</style>
+{% endblock %}
