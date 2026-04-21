@@ -16,7 +16,7 @@ def submit_proposal(request, task_id):
     ).exists()
     if already_applied:
         messages.warning(request, 'You have already applied for this task!')
-        return redirect('task_detail', pk=task_id)
+        return redirect('tasks:task_detail', pk=task.id)
     if request.method == 'POST':
         form = ProposalForm(request.POST)
         if form.is_valid():
@@ -25,7 +25,7 @@ def submit_proposal(request, task_id):
             proposal.freelancer = request.user
             proposal.save()
             messages.success(request, 'Proposal submitted!')
-            return redirect('task_detail', pk=task_id)
+            return redirect('tasks:task_detail', pk=task.id)
     else:
         form = ProposalForm()
     return render(request, 'proposals/submit_proposal.html',
@@ -47,11 +47,11 @@ def my_proposals(request):
                    'status_filter': status_filter,
                    'search': search})
 @login_required
-def view_proposals(request, task_id):
+def task_proposals(request, task_id):
     from tasks.models import Task
     task = get_object_or_404(Task, id=task_id, client=request.user)
     proposals = task.proposals.select_related('freelancer')
-    return render(request, 'proposals/view_proposals.html',
+    return render(request, 'proposals/task_proposals.html',
                   {'task': task, 'proposals': proposals})
 
 @login_required
@@ -230,4 +230,54 @@ def reject_proposal(request, proposal_id):
     proposal.save()
     
     messages.success(request, "Proposal rejected.")
+    return redirect('proposals:task_proposals', task_id=task.id)
+@login_required
+def complete_task(request, proposal_id):
+    """Mark task as completed and submit review (Client only)"""
+    proposal = get_object_or_404(Proposal, id=proposal_id)
+    task = proposal.task
+    
+    # Only task owner can complete
+    if task.client != request.user:
+        messages.error(request, "You don't have permission to complete this task.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Check if proposal is awarded
+    if proposal.status != 'awarded':
+        messages.error(request, "This proposal is not awarded.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    # Check if task is in progress
+    if task.status != 'in_progress':
+        messages.error(request, "This task is not in progress.")
+        return redirect('proposals:task_proposals', task_id=task.id)
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        # Validate rating
+        if not rating or not comment:
+            messages.error(request, "Please provide both rating and comment.")
+            return redirect('proposals:task_proposals', task_id=task.id)
+        
+        # Create review and complete task (atomic transaction)
+        with transaction.atomic():
+            # Create review
+            Review.objects.create(
+                task=task,
+                proposal=proposal,
+                reviewer=request.user,
+                freelancer=proposal.freelancer,
+                rating=int(rating),
+                comment=comment
+            )
+            
+            # Update task status
+            task.status = 'completed'
+            task.save()
+        
+        messages.success(request, f"Task marked as completed! Review submitted for {proposal.freelancer.get_full_name()}.")
+        return redirect('tasks:client_dashboard')
+    
     return redirect('proposals:task_proposals', task_id=task.id)
