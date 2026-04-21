@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Notification
+from accounts.models import User
+from django.db.models import Q
 
 
 def home(request):
@@ -13,8 +15,24 @@ def browse_tasks(request):
     return render(request, 'core/browse_tasks.html', {})
 
 
+
 def browse_freelancers(request):
-    return render(request, 'core/browse_freelancers.html', {})
+    query = request.GET.get('q', '')
+
+    freelancers = User.objects.filter(role='freelancer')
+
+    if query:
+        freelancers = freelancers.filter(
+            Q(username__icontains=query) |
+            Q(headline__icontains=query) |
+            Q(skills__icontains=query) |
+            Q(availability__icontains=query)
+        )
+
+    return render(request, 'core/browse_freelancers.html', {
+        'freelancers': freelancers,
+        'query': query,
+    })
 
 
 @login_required
