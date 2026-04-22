@@ -152,15 +152,6 @@
                       </span>
                     {% endif %}
                   </a>
-                  {% if task.status == 'in_progress' %}
-                  <form method="POST" action="{% url 'proposals:complete_task' task.pk %}" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-success"
-                      onclick="return confirm('Mark this task as completed?')">
-                      <i class="bi bi-check-lg me-1"></i>Complete
-                    </button>
-                  </form>
-                  {% endif %}
                 </div>
               </td>
             </tr>

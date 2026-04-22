@@ -68,7 +68,21 @@ def task_list(request):
 
 def task_detail(request, pk):
     task = get_object_or_404(Task, pk=pk)
-    return render(request, 'tasks/task_detail.html', {'task': task})
+    
+    # get the awarded proposal if task is in progress
+    # so the complete button can pass the correct proposal id
+    awarded_proposal = None
+    if task.status == 'in_progress':
+        try:
+            awarded_proposal = task.proposals.filter(status='awarded').first()
+        except Exception:
+            pass
+    
+    context = {
+        'task': task,
+        'awarded_proposal': awarded_proposal,
+    }
+    return render(request, 'tasks/task_detail.html', context)
 
 
 @login_required
