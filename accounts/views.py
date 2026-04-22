@@ -69,10 +69,23 @@ def freelancer_profile_view(request):
 
 
 def public_freelancer_profile_view(request, username):
+    from proposals.models import Review
+    from django.db.models import Avg
+    
     user_profile = get_object_or_404(User, username=username, role='freelancer')
+    
+    # Get all reviews for this freelancer
+    reviews = Review.objects.filter(freelancer=user_profile).select_related('reviewer', 'task').order_by('-created_at')
+    
+    # Calculate average rating
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+    review_count = reviews.count()
 
     return render(request, 'accounts/public_freelancer_profile.html', {
-        'user_profile': user_profile
+        'user_profile': user_profile,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'review_count': review_count,
     })
 
 @login_required

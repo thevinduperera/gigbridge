@@ -65,7 +65,7 @@
               <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-outline-primary">
                 <i class="bi bi-pencil me-2"></i>Edit Task
               </a>
-              <a href="{% url 'proposals:view_proposals' task.pk %}" class="btn btn-outline-success">
+              <a href="{% url 'proposals:task_proposals' task.pk %}" class="btn btn-outline-success">
                 <i class="bi bi-people me-2"></i>View Proposals
                 {% if task.proposal_count > 0 %}({{ task.proposal_count }}){% endif %}
               </a>
