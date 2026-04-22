@@ -20,14 +20,12 @@ def browse_freelancers(request):
     query = request.GET.get('q', '')
 
     freelancers = User.objects.filter(role='freelancer')
-
     if query:
         freelancers = freelancers.filter(
             Q(username__icontains=query) |
             Q(headline__icontains=query) |
-            Q(skills__icontains=query) |
             Q(availability__icontains=query)
-        )
+        ).distinct()
 
     return render(request, 'core/browse_freelancers.html', {
         'freelancers': freelancers,
