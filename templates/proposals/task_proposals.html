@@ -93,17 +93,11 @@
                             <!-- Freelancer Details -->
                             <div class="flex-grow-1">
                                 <h5 class="mb-1" style="color: var(--slate-900); font-family: var(--font-heading);">
-                                    {% url 'accounts:freelancer_profile' proposal.freelancer.id as profile_url %}
-                                    {% if profile_url %}
-                                        <a href="{{ profile_url }}" style="color: var(--slate-900); text-decoration: none;">
-                                            {{ proposal.freelancer.get_full_name }}
-                                        </a>
-                                    {% else %}
-                                        <span style="color: var(--slate-900);">
-                                            {{ proposal.freelancer.get_full_name }}
-                                        </span>
-                                    {% endif %}
-                                </h5>
+    <a href="{% url 'accounts:public_freelancer_profile' proposal.freelancer.username %}"
+       style="color: var(--slate-900); text-decoration: none;">
+        {{ proposal.freelancer.get_full_name|default:proposal.freelancer.username }}
+    </a>
+</h5>
                                 
                                 {% if proposal.freelancer.headline %}
                                 <p class="mb-2" style="color: var(--slate-600);">
