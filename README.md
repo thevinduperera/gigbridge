@@ -1,7 +1,23 @@
-# GigBridge 
-**Connecting Talent with Opportunity**
+# GigBridge 🎳
+**Connecting Talent with Opportunity 🤍**
 
-A full-featured freelance marketplace built with Django 6 and Bootstrap 5, developed as a 3-week team project.
+## 📖 About GigBridge
+
+GigBridge is a full-stack freelance marketplace web application that connects clients who need work done with skilled freelancers ready to deliver. Built as a university team project using Django and Bootstrap, GigBridge replicates the core functionality of real-world platforms like Fiverr and Upwork.
+
+The platform supports two types of users — **clients** who post tasks and hire freelancers, and **freelancers** who browse opportunities and submit proposals. The entire workflow from task posting to project completion is handled within the platform, including proposal management, task awarding, and a star-based review system.
+
+### 🎯 What Problem Does It Solve?
+
+Finding reliable freelancers or quality work opportunities is often time-consuming and fragmented. GigBridge simplifies this by bringing everything into one place — task discovery, proposals, hiring decisions, and reviews — making the process faster and more transparent for both sides.
+
+### 🔄 How It Works
+
+1. **Client** registers and posts a task with a title, description, budget range, deadline, and required skills
+2. **Freelancers** browse available tasks and submit proposals with their cover letter, price, and estimated delivery time
+3. **Client** reviews all proposals and awards the task to the best candidate
+4. **Freelancer** completes the work and the client marks it as done
+5. Both parties can leave reviews, building reputation over time
 
 ---
 
