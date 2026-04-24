@@ -151,7 +151,7 @@ Once categories are added, they will automatically appear in the Post a Task for
 
 ---
 
-### 2. Add Skills
+**To add skills:**
 
 The **Skills Required** field in the Post a Task form will also be empty until skills are created.
 
@@ -176,6 +176,12 @@ The **Skills Required** field in the Post a Task form will also be empty until s
 - PHP
 - Social Media Marketing
 - Android Development
+
+---
+
+
+### To test as an end user visit http://127.0.0.1:8000/accounts/register/ and register as either a Client or Freelancer to experience the full platform.
+
 
 ---
 
