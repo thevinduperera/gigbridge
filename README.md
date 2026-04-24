@@ -124,10 +124,11 @@ python manage.py runserver
 Open your browser at **http://127.0.0.1:8000**
 
 ---
+## ⚠️ Important — Admin Setup Before Using the Platform
 
-## ⚠️ Important — Add Categories Before Posting Tasks
+Before users can fully use GigBridge, a site administrator must add initial data through the Django admin panel. Two fields in the **Post a New Task** form will appear empty without this setup.
 
-The **Post a New Task** form includes a **Category** dropdown. This dropdown will appear empty until categories are added through the Django admin panel.
+---
 
 **To add categories:**
 
@@ -147,6 +148,34 @@ The **Post a New Task** form includes a **Category** dropdown. This dropdown wil
 - Accounting & Finance
 
 Once categories are added, they will automatically appear in the Post a Task form and the Browse by Category section on the landing page.
+
+---
+
+### 2. Add Skills
+
+The **Skills Required** field in the Post a Task form will also be empty until skills are created.
+
+**Steps:**
+1. Go to **http://127.0.0.1:8000/admin**
+2. Log in with your superuser credentials
+3. Click **Skills** under the Tasks section
+4. Click **Add Skill** and create your skills
+
+ **Suggested default skills to add:**
+- Python
+- Django
+- Javascript
+- React 
+- HTML & CSS
+- Figma
+- UI/UX Design
+- Graphic Design
+- Copywriting
+- Data Analysis
+- Video Editing
+- PHP
+- Social Media Marketing
+- Android Development
 
 ---
 
