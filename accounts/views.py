@@ -1,3 +1,114 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-# Create your views here.
+from .forms import CustomUserCreationForm, FreelancerProfileForm, ClientProfileForm
+from .models import User
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('accounts:login')
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:login')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+
+            if user.role == 'client':
+                return redirect('tasks:client_dashboard')
+            elif user.role == 'freelancer':
+                return redirect('tasks:freelancer_dashboard')
+            return redirect('core:home')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'accounts/login.html', {'form': form})
+
+
+@login_required
+def freelancer_profile_edit_view(request):
+    if request.user.role != 'freelancer':
+        return redirect('core:home')
+
+    if request.method == 'POST':
+        form = FreelancerProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:freelancer_profile_view')
+    else:
+        form = FreelancerProfileForm(instance=request.user)
+
+    return render(request, 'accounts/freelancer_profile_edit.html', {'form': form})
+
+
+@login_required
+def freelancer_profile_view(request):
+    if request.user.role != 'freelancer':
+        return redirect('core:home')
+
+    return render(request, 'accounts/freelancer_profile_view.html', {
+        'user_profile': request.user
+    })
+
+
+def public_freelancer_profile_view(request, username):
+    from proposals.models import Review
+    from django.db.models import Avg
+    
+    user_profile = get_object_or_404(User, username=username, role='freelancer')
+    
+    # Get all reviews for this freelancer
+    reviews = Review.objects.filter(freelancer=user_profile).select_related('reviewer', 'task').order_by('-created_at')
+    
+    # Calculate average rating
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+    review_count = reviews.count()
+
+    return render(request, 'accounts/public_freelancer_profile.html', {
+        'user_profile': user_profile,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'review_count': review_count,
+    })
+
+@login_required
+def client_profile_edit_view(request):
+    if request.user.role != 'client':
+        return redirect('core:home')
+
+    if request.method == 'POST':
+        form = ClientProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:client_profile_view')
+    else:
+        form = ClientProfileForm(instance=request.user)
+
+    return render(request, 'accounts/client_profile_edit.html', {'form': form})
+
+
+@login_required
+def client_profile_view(request):
+    if request.user.role != 'client':
+        return redirect('core:home')
+
+    return render(request, 'accounts/client_profile_view.html', {
+        'user_profile': request.user
+    })

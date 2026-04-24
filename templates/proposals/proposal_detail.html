@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h3 style="color: var(--slate-900);">Proposal Detail</h3>
+              <p class="text-muted mb-0">Task: <strong>{{ proposal.task.title }}</strong></p>
+            </div>
+            <span class="badge rounded-pill px-3 py-2
+              {% if proposal.status == 'awarded' %}bg-success
+              {% elif proposal.status == 'rejected' %}bg-danger
+              {% else %}bg-secondary{% endif %}">
+              {{ proposal.status|title }}
+            </span>
+          </div>
+
+          <div class="mb-3 p-3 rounded" style="background: var(--slate-100);">
+            <p class="text-muted small mb-1">Cover Letter</p>
+            <p class="mb-0">{{ proposal.cover_letter }}</p>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-6">
+              <div class="p-3 rounded" style="background: var(--slate-100);">
+                <p class="text-muted small mb-1">Your Price</p>
+                <p class="mb-0 fw-bold">${{ proposal.price }}</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 rounded" style="background: var(--slate-100);">
+                <p class="text-muted small mb-1">Estimated Days</p>
+                <p class="mb-0 fw-bold">{{ proposal.estimated_days }} days</p>
+              </div>
+            </div>
+          </div>
+
+          {% if proposal.reject_reason %}
+          <div class="alert alert-danger">
+            <strong>Rejection Reason:</strong> {{ proposal.reject_reason }}
+          </div>
+          {% endif %}
+
+     <a href="{% url 'proposals:my_proposals' %}" class="btn btn-outline-secondary w-100">
+  Back to My Proposals
+</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

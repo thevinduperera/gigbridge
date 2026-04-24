@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load proposal_filters %}
+{% block title %}Proposals for {{ task.title }} - GigBridge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="{% url 'tasks:task_detail' task.id %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Task
+        </a>
+    </div>
+
+    <!-- Task Info Header -->
+    <div class="card mb-4" style="border-color: var(--slate-200);">
+        <div class="card-body">
+            <h2 class="mb-3" style="color: var(--slate-900); font-family: var(--font-heading);">
+                {{ task.title }}
+            </h2>
+            <div class="d-flex gap-3 flex-wrap">
+                <span class="badge" style="background-color: var(--teal-100); color: var(--teal-600);">
+                    Budget: ${{ task.budget_min }} - ${{ task.budget_max }}
+                </span>
+                <span class="badge" style="background-color: var(--slate-100); color: var(--slate-700);">
+                    {{ task.status|title }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposal Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card h-100" style="border-color: var(--slate-200);">
+                <div class="card-body text-center">
+                    <h3 class="mb-0" style="color: var(--teal-600); font-family: var(--font-heading);">
+                        {{ total_count }}
+                    </h3>
+                    <p class="mb-0" style="color: var(--slate-500);">Total Proposals</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100" style="border-color: var(--slate-200);">
+                <div class="card-body text-center">
+                    <h3 class="mb-0" style="color: var(--slate-700); font-family: var(--font-heading);">
+                        {{ pending_count }}
+                    </h3>
+                    <p class="mb-0" style="color: var(--slate-500);">Pending Review</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100" style="border-color: var(--slate-200);">
+                <div class="card-body text-center">
+                    <h3 class="mb-0" style="color: var(--teal-600); font-family: var(--font-heading);">
+                        {{ awarded_count }}
+                    </h3>
+                    <p class="mb-0" style="color: var(--slate-500);">Awarded</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposals Heading -->
+    <h4 class="mb-4" style="color: var(--slate-900); font-family: var(--font-heading);">
+        All Proposals ({{ total_count }})
+    </h4>
+
+    <!-- Proposals List -->
+    {% if proposals %}
+        <div class="row g-4">
+            {% for proposal in proposals %}
+            <div class="col-12">
+                <div class="card h-100" style="border-color: var(--slate-200);">
+                    <div class="card-body">
+                        <!-- Freelancer Info -->
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <!-- Profile Picture -->
+                            {% if proposal.freelancer.profile_picture %}
+                                <img src="{{ proposal.freelancer.profile_picture.url }}" 
+                                     alt="{{ proposal.freelancer.get_full_name }}"
+                                     class="rounded-circle"
+                                     style="width: 64px; height: 64px; object-fit: cover; border: 2px solid var(--slate-200);">
+                            {% else %}
+                                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                     style="width: 64px; height: 64px; background-color: var(--teal-100); border: 2px solid var(--slate-200);">
+                                    <i class="bi bi-person-fill" style="font-size: 32px; color: var(--teal-600);"></i>
+                                </div>
+                            {% endif %}
+
+                            <!-- Freelancer Details -->
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1" style="color: var(--slate-900); font-family: var(--font-heading);">
+    <a href="{% url 'accounts:public_freelancer_profile' proposal.freelancer.username %}"
+       style="color: var(--slate-900); text-decoration: none;">
+        {{ proposal.freelancer.get_full_name|default:proposal.freelancer.username }}
+    </a>
+</h5>
+                                
+                                {% if proposal.freelancer.headline %}
+                                <p class="mb-2" style="color: var(--slate-600);">
+                                    {{ proposal.freelancer.headline }}
+                                </p>
+                                {% endif %}
+
+                                <!-- Skills -->
+                                    {% if proposal.freelancer.skills %}
+                                        <div class="d-flex gap-2 flex-wrap mb-2">
+                                             {% for skill in proposal.freelancer.skills|split:',' %}
+                                             <span class="badge" style="background-color: var(--slate-100); color: var(--slate-700);">
+                                              {{ skill }}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                <!-- Rate -->
+                                {% if proposal.freelancer.hourly_rate %}
+                                <p class="mb-0" style="color: var(--slate-500); font-size: 0.9rem;">
+                                    <i class="bi bi-cash"></i> ${{ proposal.freelancer.hourly_rate }}/hr
+                                </p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div>
+                                {% if proposal.status == 'pending' %}
+                                <span class="badge" style="background-color: var(--slate-100); color: var(--slate-700);">
+                                    Pending
+                                </span>
+                                {% elif proposal.status == 'awarded' %}
+                                <span class="badge" style="background-color: var(--teal-100); color: var(--teal-600);">
+                                    <i class="bi bi-check-circle-fill"></i> Awarded
+                                </span>
+                                {% elif proposal.status == 'rejected' %}
+                                <span class="badge bg-danger">
+                                    Rejected
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr style="border-color: var(--slate-200);">
+
+                        <!-- Proposal Details -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <p class="mb-0" style="color: var(--slate-500); font-size: 0.9rem;">
+                                    Bid Amount
+                                </p>
+                                <h5 class="mb-0" style="color: var(--teal-600); font-family: var(--font-heading);">
+                                    ${{ proposal.price }}
+                                </h5>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-0" style="color: var(--slate-500); font-size: 0.9rem;">
+                                    Estimated Duration
+                                </p>
+                                <h5 class="mb-0" style="color: var(--slate-700); font-family: var(--font-heading);">
+                                    {{ proposal.estimated_days }} days
+                                </h5>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-0" style="color: var(--slate-500); font-size: 0.9rem;">
+                                    Submitted
+                                </p>
+                                <h5 class="mb-0" style="color: var(--slate-700); font-family: var(--font-heading);">
+                                    {{ proposal.created_at|date:"M d, Y" }}
+                                </h5>
+                            </div>
+                        </div>
+
+                        <!-- Cover Letter -->
+                        <div class="mb-3">
+                            <h6 style="color: var(--slate-900); font-family: var(--font-heading);">
+                                Cover Letter
+                            </h6>
+                            <p style="color: var(--slate-700); white-space: pre-line;">
+                                {{ proposal.cover_letter }}
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        {% if proposal.status == 'pending' %}
+                        <div class="d-flex gap-2">
+                            <!-- Award Button -->
+                            <form method="post" action="{% url 'proposals:award_proposal' proposal.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" 
+                                        onclick="return confirm('Award this task to {{ proposal.freelancer.get_full_name }}?')">
+                                    <i class="bi bi-award"></i> Award Task
+                                </button>
+                            </form>
+
+                            <!-- Reject Button -->
+                            <form method="post" action="{% url 'proposals:reject_proposal' proposal.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger" 
+                                        onclick="return confirm('Reject this proposal?')">
+                                    <i class="bi bi-x-circle"></i> Reject
+                                </button>
+                            </form>
+                        </div>
+
+                        {% elif proposal.status == 'awarded' and task.status == 'in_progress' %}
+                        <div class="d-flex gap-2">
+                            <!-- Mark as Completed Button -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#completeModal{{ proposal.id }}">
+                                <i class="bi bi-check-circle"></i> Mark as Completed
+                            </button>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: var(--slate-300);"></i>
+            <h4 class="mt-3" style="color: var(--slate-500); font-family: var(--font-heading);">
+                No proposals yet
+            </h4>
+            <p style="color: var(--slate-500);">
+                Freelancers will be able to submit proposals once they view your task.
+            </p>
+        </div>
+    {% endif %}
+</div>
+<!-- Review Modals -->
+{% for proposal in proposals %}
+{% if proposal.status == 'awarded' %}
+<div class="modal fade" id="completeModal{{ proposal.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border-color: var(--slate-200);">
+                <h5 class="modal-title" style="color: var(--slate-900); font-family: var(--font-heading);">
+                    Complete Task & Leave Review
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'proposals:complete_task' proposal.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p style="color: var(--slate-700);">
+                        You're about to mark this task as completed and leave a review for 
+                        <strong>{{ proposal.freelancer.get_full_name }}</strong>.
+                    </p>
+                    
+                    <!-- Star Rating -->
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--slate-700);">
+                            Rating <span class="text-danger">*</span>
+                        </label>
+                        <div class="star-rating">
+                            {% for i in "12345" %}
+                            <input type="radio" name="rating" value="{{ forloop.counter }}" id="star{{ forloop.counter }}_{{ proposal.id }}" required>
+                            <label for="star{{ forloop.counter }}_{{ proposal.id }}">★</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Review Comment -->
+                    <div class="mb-3">
+                        <label for="comment{{ proposal.id }}" class="form-label" style="color: var(--slate-700);">
+                            Review Comment <span class="text-danger">*</span>
+                        </label>
+                        <textarea name="comment" id="comment{{ proposal.id }}" class="form-control" rows="4" 
+                                  placeholder="Share your experience working with this freelancer..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-color: var(--slate-200);">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Complete & Submit Review
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+<style>
+/* Star Rating Styles */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 2rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    color: var(--slate-300);
+    transition: color 0.2s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #fbbf24;
+}
+</style>
+{% endblock %}

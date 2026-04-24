@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h3 class="mb-1" style="color: var(--slate-900);">Reject Proposal</h3>
+          <p class="text-muted mb-4">
+            You are rejecting the proposal from
+            <strong>{{ proposal.freelancer.username }}</strong>
+          </p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label class="form-label">Reason (optional)</label>
+              {{ form.reason }}
+              <div class="form-text">
+                This message will be shown to the freelancer.
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-danger w-100 py-2">
+                <i class="bi bi-x-circle"></i> Confirm Reject
+              </button>
+              <a href="{% url 'proposals:task_proposals' proposal.task.id %}"
+                 class="btn btn-outline-secondary w-100 py-2">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register — GigBridge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+
+      <!-- header -->
+      <div class="text-center mb-4">
+        <i class="bi bi-person-plus-fill mb-3" style="font-size: 2.5rem; color: var(--teal-600);"></i>
+        <h2 class="fw-bold" style="color: var(--slate-800);">Create an Account</h2>
+        <p style="color: var(--slate-500);">Join GigBridge and start connecting today</p>
+      </div>
+
+      <!-- card -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <form method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="color: var(--slate-700);">
+                {{ field.label }}
+              </label>
+
+              {% if field.field.widget.input_type == 'select' %}
+                <select name="{{ field.html_name }}"
+                  id="{{ field.id_for_label }}"
+                  class="form-select {% if field.errors %}is-invalid{% endif %}">
+                  {% for value, label in field.field.choices %}
+                  <option value="{{ value }}"
+                    {% if field.value == value %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                  {% endfor %}
+                </select>
+              {% else %}
+                <input
+                  type="{{ field.field.widget.input_type }}"
+                  name="{{ field.html_name }}"
+                  id="{{ field.id_for_label }}"
+                  class="form-control {% if field.errors %}is-invalid{% endif %}"
+                  {% if field.value %}value="{{ field.value }}"{% endif %}
+                  placeholder="Enter {{ field.label|lower }}"
+                />
+              {% endif %}
+
+              {% if field.help_text %}
+              <div class="form-text" style="color: var(--slate-500);">
+                {{ field.help_text }}
+              </div>
+              {% endif %}
+
+              {% if field.errors %}
+              <div class="invalid-feedback">
+                {{ field.errors|join:", " }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- non field errors -->
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2">
+              {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary py-2 fw-semibold">
+                <i class="bi bi-person-check me-2"></i>Create Account
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- login link -->
+      <p class="text-center mt-4" style="color: var(--slate-500);">
+        Already have an account?
+        <a href="{% url 'accounts:login' %}" class="fw-semibold text-decoration-none"
+          style="color: var(--teal-600);">
+          Login here
+        </a>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
